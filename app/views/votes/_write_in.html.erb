@@ -1,0 +1,7 @@
+<% @write_in_candidates ||= 100 %>
+<% @write_in_candidates += 1 %>
+
+<div id="drag<%= @write_in_candidates %>" class="drag">
+    <%= image_tag 'unnamed.png' %>
+    <span class="candidate"><%= name %></span>
+</div>

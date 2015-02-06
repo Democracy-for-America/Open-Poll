@@ -21,3 +21,26 @@
 
 en:
   hello: "Hello world"
+
+en:
+  activerecord:
+    attributes:
+      vote:
+        email: ""
+        zip: ""
+        name: ""
+    errors:
+      models:
+        vote:
+          attributes:
+            name:
+              too_long: "255 character max"
+              invalid: "First and last name required"
+              blank: "First and last name required"
+            email:
+              too_long: "255 character max"
+              blank: "Valid email address required"
+              invalid: "Valid email address required"
+            zip:
+              blank: "Valid zipcode required"
+              invalid: " Valid zipcode required"

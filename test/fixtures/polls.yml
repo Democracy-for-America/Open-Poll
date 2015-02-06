@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  subtitle: MyString
+  short_name: MyString
+  end_voting: false
+  show_results: false
+
+two:
+  title: MyString
+  subtitle: MyString
+  short_name: MyString
+  end_voting: false
+  show_results: false

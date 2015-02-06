@@ -1,0 +1,63 @@
+<%= simple_form_for(@vote, url: "/polls/#{params[:poll]}") do |f| %>
+
+  <% if false && @vote.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@vote.errors.count, "error") %> prohibited this vote from being saved:</h2>
+    <ul>
+      <% @vote.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div id="user-form" class="container" style="display: <%= @vote.errors.empty? ? 'none' : 'block' %>;">
+    <div class="sixteen columns">
+      <h4 style="text-align: center;">Save your choices by submitting the form below.</h4>
+      <p style="text-align: center;">You'll be provided with a link to share your selections, and you can <br class="monitor">come back and update them at any time.</p>
+    </div>
+    <div class="twelve columns offset-by-two add-bottom">
+      <div class="four columns alpha">
+        <div style="padding-right: 12px;">
+          <%= f.input :name, label: "Name", input_html: {class: "contact-input remove-bottom"} %>
+        </div>
+      </div>
+      <div class="four columns">
+        <div style="padding-right: 12px;">
+          <%= f.input :email, label: "Email", input_html: {class: "contact-input remove-bottom"} %>
+        </div>
+      </div>
+      <div class="four columns omega">
+        <div style="padding-right: 12px;">
+          <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
+        </div>
+      </div>
+      <br class="clear">
+    </div>
+    <div class="eight columns offset-by-six">
+      <div class="four columns alpha" style="max-width: 50%;">
+        <div style="padding: 5px; text-align: center;">
+          <button class="btn-lrg btn-blue" style="width: 75%;">SUBMIT</button>
+        </div>
+      </div>
+      <div class="four columns omega" style="max-width: 50%;">
+        <div style="padding: 5px; text-align: right;">
+          <button class="btn-lrg btn-white" onclick="cancelForm(); return false;" style="width: 75%; text-align: right;">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <fieldset style="display: <%= params[:test] ? 'block' : 'none' %>">
+    <legend>Hidden Inputs</legend>
+    <p>(These inputs will be hidden, although in the mean time they may be used as a write-in option.)</p>
+    <%= f.input :first_choice, input_html: {value: (@vote.first_choice || params[:i_voted_for])} %>
+    <%= f.input :second_choice %>
+    <%= f.input :third_choice %>
+    <hr>
+    <%= f.input :source, input_html: {value: (@vote.source || params[:source])} %>
+    <%= f.input :referring_akid, input_html: {value: params[:akid]} %>
+    <%= f.input :referring_vote_id, as: :string, input_html: {value: (@vote.referring_vote_id || (@parent ? @parent.id : nil))} %>
+    <%= f.input :full_querystring, input_html: {value: (@vote.full_querystring || request.query_string)} %>
+  </fieldset>
+<% end %>

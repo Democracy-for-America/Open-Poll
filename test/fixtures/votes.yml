@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  name: MyString
+  zip: MyString
+  first_choice: MyString
+  second_choice: MyString
+  third_choice: MyString
+  source: MyString
+  actionkit_id: 1
+  random_hash: MyString
+  ip_address: MyString
+  session_cookie: MyString
+  full_querystring: MyText
+  referring_vote_id: 1
+  referring_akid: MyString
+
+two:
+  email: MyString
+  name: MyString
+  zip: MyString
+  first_choice: MyString
+  second_choice: MyString
+  third_choice: MyString
+  source: MyString
+  actionkit_id: 1
+  random_hash: MyString
+  ip_address: MyString
+  session_cookie: MyString
+  full_querystring: MyText
+  referring_vote_id: 1
+  referring_akid: MyString

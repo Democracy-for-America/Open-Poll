@@ -1,0 +1,13 @@
+<div class="header blue-gradient ribbon">
+    <div id="header-inner">
+      <a href="http://www.democracyforamerica.com"><%= image_tag 'dfa_clear.png', id: 'logo' %></a>
+      <div id="title-wrapper">
+        <span id="main-title"><%= @poll.title %></span>
+        <br>
+        <span id="sub-title"><% if @subtitle %><%= @subtitle %><% else %><%= @poll.subtitle %><% end %></span>
+      </div>
+      <div style="display: inline-block; width: 100%;">&nbsp;</div>
+    </div>
+</div>
+<div class="header2 white ribbon"></div>
+<div class="header3 red-gradient ribbon"></div>

@@ -1,0 +1,270 @@
+/* This file contains the CSS for dragable content */
+
+.ribbon {
+    position: fixed;
+    width: 100%;
+    z-index: 900;
+}
+
+.drag {
+    z-index: 100;
+    color: #333;
+    line-height: 14px;
+    border-radius: 25px;
+    width: 100px;
+    height: 100px;
+    cursor: move;
+}
+
+.drag-wrap {
+    background-color: #f7f7f7;
+    border-radius: 25px;
+    width: 100px;
+    height: 100px;
+    vertical-align: top;
+    display: inline-block;
+    margin: 0 25px 60px;
+}
+
+#drag-wrap-writein .writable:not(:first-child) {
+    /*display: none;*/
+}
+
+.drag img {
+    height: 100px;
+    width: 100px;
+    border-radius: 25px;
+}
+
+.office, .candidate, .write-candidate {
+    color :#333 !important;
+    display: block;
+    position: relative;
+    left: -25px;
+    width: 150px;
+}
+
+input.write-in[type="text"] {
+  color: black;
+  font-size: 14px !important;
+  width: 140px !important;
+  margin: 0 0 0 -25px;
+  max-width: 140px;
+}
+
+.write-name {
+  display: none;
+  font-size: 14px !important;
+}
+
+.office {
+    letter-spacing: -0.5px;
+    font-size: 12px;
+}
+
+.candidate, .write-candidate {
+    letter-spacing: -1px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.write-name {
+  color :#333 !important;
+  position: relative;
+  left: -25px;
+  letter-spacing: -1px;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 150px;
+}
+
+.drop {
+    z-index: 0;
+    position: relative;
+    vertical-align: top;
+    color: #ddd;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border: solid 1px #ddd;
+    border-radius: 25px;
+    margin: 18px 25px 0;
+}
+
+.drop::after {
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    font-size: 80px;
+    line-height: 100px;
+    display: block;
+    width: 100px;
+    text-align: center;
+}
+
+.drop1::after { content: "1"; }
+.drop2::after { content: "2"; }
+.drop3::after { content: "3"; }
+
+.drop .office, .drop .write-candidate, .drop input.write-in[type="text"] {
+    display: none;
+}
+
+.drop .write-name {
+  display: block;
+}
+
+.hover {
+    background-color: #ccc;
+    color: #fff;
+    opacity: 0.5;
+}
+
+.drop .drag::before {
+    line-height: 38px;
+    height: 36px;
+    width: 36px;
+    position: absolute;
+    left: -18px;
+    top: 0px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 20px;
+    box-shadow: 0px 2px 10px #555;
+    border: solid 2px #fff;
+}
+
+.drop1 .drag::before {
+    content: "1";
+}
+
+.drop2 .drag::before {
+    content: "2";
+}
+
+.drop3 .drag::before {
+    content: "3";
+}
+
+.wrap-writein {
+  display: inline-block; 
+  height: 135px; 
+  overflow: hidden;
+}
+
+.write-in {
+    width: 90px !important;
+    font-size: 12px !important;
+    padding: 0px 4px !important;
+    margin-top: 0px !important;
+}
+
+.write-in::-webkit-input-placeholder {
+   text-align: center;
+}
+
+.write-in:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+.write-in::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+.write-in:-ms-input-placeholder {  
+   text-align: center; 
+}
+
+#red-ribbon h3 > a {
+  font-size:18px;
+  font-weight:bold;
+  -moz-border-radius:8px;
+  -webkit-border-radius:8px;
+  border-radius:8px;
+  padding: 0 12px;
+  text-decoration:none;
+  display:inline-block;
+  color:#ffffff;
+  border: 1px solid #FFFF00;
+  background-color: #FFAA00 ;
+  text-shadow:2px 2px 1px #CC7112; 
+}
+
+#red-ribbon h3 > a:hover {
+  color: #1759a9;
+  border: 1px solid #FFFF00;
+  background-color: white;
+  text-shadow: none;
+}
+
+#red-ribbon h3 > a:active {
+  position:relative;
+  top:1px;
+  left: 1px;
+}
+
+
+.btn-lrg, .btn-lrg:hover {
+    font-family: "Montserrat", "Gotham", "Futura", "Avenir", "Futura", "Trebuchet MS", Helvetica, Arial, sans-serif;
+    padding: 12px;
+    font-size: 20px;
+    border-radius: 12px;
+    border: none;
+}
+
+.btn-blue, .btn-blue:hover {
+    color: #FFF;
+    background: #0058A0;
+}
+
+.btn-white, .btn-white:hover {
+    font-size: 16px;
+    color: #F00;
+    background: #FFF;
+}
+
+@media only screen and (min-width: 481px) and (max-width: 700px) {
+  .monitor { display: none; } 
+  h3 { font-size: 24px; }
+  #drop-div h3 { padding: 30px; }
+  #red-ribbon h3 { letter-spacing: -1px; padding: 4px 0; }
+}
+
+@media only screen and (min-width: 701px) {
+  #red-ribbon h3 { padding: 0; }
+  #drop-div h3 { padding: 30px 0; }
+}
+
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+  .monitor { display: none; } 
+  .drop, .drag, .drag img { width: 80px; height: 80px; }
+  .drag-wrap { width: 80px; height: 80px; margin-bottom: 72px; margin-right: 8px; margin-left: 8px; }
+  .drop { margin: 30px 8px 0; font-size: 60px; line-height: 80px; }
+  .office, .candidate, .write-candidate, .write-name { width: 90px; font-size: 11px !important; left: -5px; line-height: 1.1em;}
+  .top-three { margin-top: 15px; }
+  .drop .drag::before {
+    left: -12px;
+  }
+  .wrap-writein { height: 120px;}
+  .drop::after {
+    font-size: 60px;
+    line-height: 80px;
+    width: 80px;
+  }
+
+  input.write-in[type="text"] {
+    font-size: 11px !important;
+    margin: 0 0 0 0px;
+    width: 80px !important;
+    max-width: 80px;
+  }
+
+  #red-ribbon h3 > a { font-size: 14px; letter-spacing: -1px; position: relative; top: -1px; }
+  #drop-div h3 { padding: 24px; font-size: 21px; }  
+  .write-in { position: relative; left: -5px; }
+}
+
+.drop1 { margin-left: 0px; }
+.drop3 { margin-right: 0px; }

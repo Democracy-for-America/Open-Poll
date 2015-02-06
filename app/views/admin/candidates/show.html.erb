@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @candidate.name %>
+</p>
+
+<p>
+  <strong>Office:</strong>
+  <%= @candidate.office %>
+</p>
+
+<p>
+  <strong>Show on ballot:</strong>
+  <%= @candidate.show_on_ballot %>
+</p>
+
+<p>
+  <strong>Show in results:</strong>
+  <%= @candidate.show_in_results %>
+</p>
+
+<p>
+  <strong>Image:</strong><br>
+  <%= image_tag @candidate.image(:thumb) %>
+</p>
+
+<%= link_to 'Edit', edit_admin_poll_candidate_path(:poll, @candidate) %> |
+<%= link_to 'Back', admin_poll_candidates_path %>

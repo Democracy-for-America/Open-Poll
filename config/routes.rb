@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+
+  namespace :admin do
+    resources :polls do
+      resources :candidates
+    end
+  end
+
+  get 'polls/:poll/votes/:random_hash' => 'votes#show'
+  get 'polls/:poll' => 'votes#new'
+  post 'polls/:poll' => 'votes#create'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,0 +1,133 @@
+/*
+GENERAL */
+
+body {
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    padding-top: 300px;
+}
+
+a {
+    text-decoration: none;
+}
+
+h3 {
+    font-weight: bold;
+    line-height: 100%;
+    text-align: center;
+}
+
+a.styled {
+  color: #004090; 
+  text-decoration:underline;
+}
+
+a.styled:hover {
+  color: #2274c9; 
+}
+
+
+label { 
+  color:#0058A0;
+  text-transform: uppercase; 
+  font-size: 14px;
+  padding-top: 6px;
+}
+
+strong {
+    color: inherit;
+}
+
+/*
+HEADER */
+.header { color: #fff; top: 0px; height: 110px; }
+.header #sub-title { font-size: 24px; }
+.header2 { top: 110px; height: 1px; }
+.header3 { top: 111px; height: 15px; }
+#drop-div { top: 126px; }
+#red-ribbon { top: 280px; }
+
+/*
+CLASSES FOR DEPRECATED IE MESSAGE DISPLAY */
+#ie_header img {margin:0 auto; display: block;}
+#ie_body { width: 1024px; margin: 30px auto; text-align: center; font-size: 18px; font-family: Arial, Helvetica, sans-serif; }
+#ie_body .icon {float:left; width: 180px; margin: 0 20px;}
+#ie_icon_list {width: 440px; margin: 0 auto; font-size: 16px;}
+#ie_body a { color: #0000CC; font-weight: bold; }
+#ie_body a:hover { color: #0088FF; }
+
+/*
+JAVASCRIPT DISABLED */
+#no_script {padding: 40px 40px 8px; text-align: center; background-color: #FF6; font: bold 20px Arial, Helvetica, sans-serif; color: #C00;}
+
+/*
+RESPONSIVE HEADER QUERIES */
+@media only screen and (min-width: 1201px) {
+    .header #title-wrapper { display: inline-block; text-align: center; margin: 0px 200px 0 0; position: relative; bottom: -10px; }
+    .header #header-inner { text-align: justify; max-width: 1200px; margin: auto; }
+    .header #logo { height: 70px; display: inline-block; margin: 0 0 0 100px; position: relative; top: 16px; }
+    .header #main-title { font-size: 40px; font-weight: bold; }
+}
+@media only screen and (min-width: 701px) and (max-width: 1200px) {
+    .header #title-wrapper { display: inline-block; text-align: center; margin: 0px 30px 0 30px; position: relative; top: -4px; }
+    .header #header-inner { text-align: justify; max-width: 700px; margin: auto; }
+    .header #logo { height: 57px; display: inline-block; margin: 26px 0 0 0; position: relative; }
+    .header #main-title { font-size: 30px; font-weight: bold; }
+}
+@media only screen and (min-width: 481px) and (max-width: 700px) {
+    body { padding-top: 300px; }
+    .header { height: 110px; }
+    .header2 { top: 110px; }
+    .header3 { top: 111px; }
+    #drop-div { top: 126px; }
+    #red-ribbon { top: 280px; }
+
+    .header #header-inner { text-align: center; margin-top: 12px; }
+    .header #logo { height: 40px; padding-bottom: 0px; }
+    .header #main-title { font-size: 20px; font-weight: bold; }
+    .header #sub-title { font-size: 14px; }
+}
+@media only screen and (max-width: 850px) {
+/*    .md-br { display: block; } */
+}
+@media only screen and (min-width: 0px) and (max-width: 480px) {
+
+    body { padding-top: 300px; }
+    .header { height: 110px; }
+    .header2 { top: 110px; }
+    .header3 { top: 111px; }
+    #drop-div { top: 126px; }
+    #red-ribbon { top: 280px; }
+
+/*    .sm-br, .md-br { display: block; } */
+    .header #header-inner { text-align: center; margin-top: 12px; }
+    .header #logo { height: 40px; padding-bottom: 0px; }
+    .header #main-title { font-size: 18px; font-weight: bold; }
+    .header #sub-title { font-size: 14px; }
+}
+
+/*
+FOOTER */
+.disclaimer {
+    border: solid 1px #004090;
+    color: #004090;
+    padding: 12px;
+    text-align: center;
+}
+
+.contact {
+    text-align: center;
+    color: #004090;
+}
+
+.contact span {
+    display: inline-block;
+}
+
+/*
+SOCIAL MEDIA BUTTONS */
+.social { margin-left: 12px; margin-right: 12px; }

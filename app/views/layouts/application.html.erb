@@ -1,14 +1,67 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>OpenPoll</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>Presidential Pulse Poll 2016</title>
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <%= stylesheet_link_tag    "application", media: "all" %>
   <%= csrf_meta_tags %>
-</head>
-<body>
+  <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
-<%= yield %>
+  <% if params[:action] == 'results' %>
+    <meta name="description" property="og:description" content="Curious how DFA's member poll might look with or without potential candidates? Just click on any candidate to remove (or add) them to the final results!">
+    <meta property="og:title" content="FINAL RESULTS: Democracy for America's <%= @poll.name %>">
+    <meta property="og:url" content="<%= @domain + request.fullpath %>">
+  <% else %>
+    <meta name="description" property="og:description" content="Find out who I voted for in Democracy for America's <%= @poll.name %>, and submit your top picks!">
+    <meta property="og:title" content="My top pick is...">  
+    <meta property="og:url" content="<%= @domain %>">
+  <% end %>
+  
+  <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
+
+  <link rel="icon" type="image/x-icon" href="<%= image_url 'favicon.ico' %>" />
+
+</head>
+<body style="zoom: 1;">
+  <%= render 'layouts/header' %>
+
+<!--[if lt IE 9]>
+  <style>
+    body { padding-top: 0;}
+    .ribbon, #candidates { display: none !important; }
+    #ie_header { background: url(<%= image_url 'ie_banner_bkg.gif' %>) repeat-x; }
+  </style>
+  <div id="ie_header"><img src="<%= image_url 'ie_banner.png' %>" width="1024" /></div>
+  <div id="ie_body" >
+    <p >You're using an outdated version of Internet Explorer.<br/>To ensure that this web site displays correctly, please update to a more modern browser.</p>
+    <div id="ie_icon_list">
+      <div class="icon"><a href="https://www.google.com/chrome/"><img src="<%= image_url 'chrome.png' %>" /><br/>Download<br/>Google Chrome</a></div>
+      <div  class="icon"><a href="https://www.mozilla.org/en-US/firefox/new/"><img src="<%= image_url 'firefox.png' %>" /><br/>Download<br/>Mozilla Firefox</a></div>  
+      <div style="clear: all"></div>
+    </div>
+  </div>
+<![endif]-->  
+
+<noscript>
+<div id="no_script"><p>This page uses Javascript. Your browser either
+doesn't support Javascript or you have it turned off.
+To see this page as it is meant to appear please use
+a Javascript enabled browser.</p></div>
+</noscript>
+
+  
+  <%= yield %>
+  <%= javascript_include_tag "application" %>
+
+  <script>
+    <% if (params['action'] == 'show' || (@vote && @vote.errors.any?)) %>
+      frozen = true;
+    <% else %>
+      frozen = false;
+    <% end %>
+  </script>
+
+  <%= render 'layouts/footer' %>
 
 </body>
 </html>

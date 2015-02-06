@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @poll.title %>
+</p>
+
+<p>
+  <strong>Subtitle:</strong>
+  <%= @poll.subtitle %>
+</p>
+
+<p>
+  <strong>Short name:</strong>
+  <%= @poll.short_name %>
+</p>
+
+<p>
+  <strong>End voting:</strong>
+  <%= @poll.end_voting %>
+</p>
+
+<p>
+  <strong>Show results:</strong>
+  <%= @poll.show_results %>
+</p>
+
+<%= link_to 'Edit', edit_admin_poll_path(@poll) %> |
+<%= link_to 'Back', admin_polls_path %>
