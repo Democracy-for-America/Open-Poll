@@ -1,0 +1,34 @@
+  <style>
+    body { padding-top: 150px; }
+  </style>
+  <div class="container">
+    <div class="twelve columns">
+      <p>
+        This site is a non-visual version of our <%= @poll.name %>. To view the visual version of this site, please visit <%= @domain %>/polls/<%= params[:poll] %>/.
+      </p>
+      <p>
+        Democracy for America wants to know who you support. Some potential candidates are listed below. Write in any of their names in the form to the right, or choose your own write-in candidate!
+      </p>
+      <p>
+        <% @poll.candidates.visible.each do |c| %>
+          - <%= c.name %>, <%= c.office %><br>
+        <% end %>
+      </p>
+    </div>
+    <div class="four columns">
+    <%= simple_form_for(@vote, url: "/polls/#{params[:poll]}") do |f| %>
+      <%= f.input :name, label: "Name", input_html: {class: "contact-input remove-bottom"} %>
+      <%= f.input :email, label: "Email", input_html: {class: "contact-input remove-bottom"} %>
+      <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
+      <%= f.input :first_choice, input_html: {class: "contact-input remove-bottom"} %>
+      <%= f.input :second_choice, input_html: {class: "contact-input remove-bottom"} %>
+      <%= f.input :third_choice, input_html: {class: "contact-input"} %>
+      <input type="hidden" name="drag" value="false">
+      <%= f.hidden_field :source, value: (@vote.source || params[:source]) %>
+      <%= f.hidden_field :referring_akid, value: params[:akid] %>
+      <%= f.hidden_field :referring_vote_id, as: :string, value: (@vote.referring_vote_id || (@parent ? @parent.id : nil)) %>
+      <%= f.hidden_field :full_querystring, value: (@vote.full_querystring || request.query_string) %>
+      <button class="btn-lrg btn-blue" style="width: 75%;">SUBMIT</button>
+    <% end %>
+    </div>
+  </div>

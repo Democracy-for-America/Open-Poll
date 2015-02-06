@@ -1,8 +1,8 @@
 <div class="container">
 
-  <% if @poll.end_voting %>
+  <% if @poll.end_voting || params[:drag] == 'false' %>
   <% else %>
-    <p style="text-align: center;"><a href="http://act.democracyforamerica.com/sign/progressive_poll_2016/" style="color: #049;">Having trouble using the site? <span style="border-bottom: dashed 1px #049;">Click here</span>.</a></p>
+    <p style="text-align: center;"><a href="?drag=false" style="color: #049;">Having trouble using the site? <span style="border-bottom: dashed 1px #049;">Click here</span>.</a></p>
   <% end %>
 
   <div class="disclaimer add-bottom">
