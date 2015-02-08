@@ -10,8 +10,8 @@
   </p>
 
   <p class="add-bottom" style="text-align: center;">
-    <%= link_to image_tag('facebook.png'), @vote.facebook_link(@domain), class: "social", target: "_blank" %>
-    <%= link_to image_tag('twitter.png'), @vote.twitter_link(@domain), class: "social", target: "_blank" %><br>
+    <%= link_to image_tag('facebook.png', alt: 'Facebook'), @vote.facebook_link(@domain), class: "social", target: "_blank" %>
+    <%= link_to image_tag('twitter.png', alt: 'Twitter'), @vote.twitter_link(@domain), class: "social", target: "_blank" %><br>
   </p>
 
   <p class="add-bottom" style="text-align: center;">
@@ -23,13 +23,13 @@
   </p>
 
   <p style="text-align: center;">
-    <%= link_to image_tag('actblue.png'), 'https://example.com/contribute/' %></strong>
+    <%= link_to image_tag('actblue.png', alt: 'Contribute via ActBlue'), 'https://secure.actblue.com/contribute/page/democracyforamericacontribute' %></strong>
   </p>
 
   <p class="half-bottom" style="text-align: center; border-top: solid 2px #CCC; max-width: 500px; margin: auto;">
     Other Democracy for America members voted for:
     <div style="text-align: center;">
-      <%= render 'results' if false %>
+      <%= render 'results' %>
     </div>
   </p>
 

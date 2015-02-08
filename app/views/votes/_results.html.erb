@@ -1,5 +1,5 @@
-<% cache('vote_results', expires_in: 5.minutes) do %>
-  <% Vote.results.each_with_index do |c,i| %>
+<% cache("top_three/#{@poll.id}", expires_in: 5.minutes) do %>
+  <% @poll.results.each_with_index do |c,i| %>
     <div style="display: inline-block; width: 80px; text-align: center; color: #777; padding: 0 8px; vertical-align: top;">
       <%= image_tag c.image(:thumb), style: "height: 60px; border-radius: 10px; opacity: .7;" %>
       <br>
