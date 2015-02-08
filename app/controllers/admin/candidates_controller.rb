@@ -1,5 +1,5 @@
 class Admin::CandidatesController < ApplicationController
-  http_basic_authenticate_with name: ENV['ADMIN_USER'], password: ENV['ADMIN_PASSWORD']
+  http_basic_authenticate_with name: Rails.application.secrets.admin_user, password: Rails.application.secrets.admin_password
   layout "admin"
   before_action :set_candidate, only: [:show, :edit, :update, :destroy]
 
