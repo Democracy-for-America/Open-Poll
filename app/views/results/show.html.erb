@@ -85,17 +85,16 @@
  </style>
 <![endif]-->  
 
-<% cache('results', expires_in: 48.hours) do %>
+<% cache('results', expires_in: 60.minutes) do %>
 
-<% @initial_results = Vote.initial_results %>
-<% @runoff_results = Vote.runoff_results %>
+<% @initial_results = @poll.initial_results %>
+<% @runoff_results = @poll.runoff_results %>
 <% @max_votes = @initial_results[0]['total'] %>
-<% @total_votes = Vote.count %>
+<% @total_votes = @poll.votes.count %>
 
 <div class="container">
-  <h3 class="add-bottom">From Nov. 6-18, 2014, Democracy for America members cast 164,733 votes for up to three favorite potential candidates in DFA's first 2016 Presidential Pulse Poll. Curious how the final results might look with or without specific candidates included in various primary scenarios? <strong>Just click on any candidate to remove (or add) them to the results.</strong></h3>
-  <!--<p style="text-align: center;">Haven't voted yet? <a href="/" style="color: #049; border-bottom: dashed 1px #049;">Vote now!</a>
-  <br/><span style="color: #777;">(Vote totals are refreshed every four hours.)</span></p>-->
+  <h3 class="add-bottom"><%= @poll.results_text.html_safe %></h3>
+  <% unless @poll.end_voting %><p style="text-align: center;">Haven't voted yet? <a href="/<%= @poll.short_name %>" style="color: #049; border-bottom: dashed 1px #049;">Vote now!</a></p><% end %>
   <ul id="active">
   <% @initial_results.each do |c| %>
     <li class="candidate_row" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>" onclick='addToEliminatedCandidates("<%= c.top_choice.upcase %>");'>
