@@ -25,7 +25,7 @@ class VotesController < ApplicationController
     # drag = params[:drag]
     respond_to do |format|
       if @vote.update(vote_params)
-        VoteMailer.confirmation(@vote, @domain).deliver_later
+        # VoteMailer.confirmation(@vote, @domain).deliver_later
         format.html { redirect_to "/#{params[:poll]}/votes/#{@vote.random_hash}" }
       else
         format.html { render action: 'new' }
