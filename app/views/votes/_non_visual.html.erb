@@ -16,7 +16,7 @@
       </p>
     </div>
     <div class="four columns">
-    <%= simple_form_for(@vote, url: "/polls/#{params[:poll]}") do |f| %>
+    <%= simple_form_for(@vote, url: "/#{params[:poll]}") do |f| %>
       <%= f.input :name, label: "Name", input_html: {class: "contact-input remove-bottom"} %>
       <%= f.input :email, label: "Email", input_html: {class: "contact-input remove-bottom"} %>
       <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
