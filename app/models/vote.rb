@@ -19,7 +19,12 @@ class Vote < ActiveRecord::Base
   validates_length_of :second_choice, maximum: 255
   validates_length_of :third_choice, maximum: 255
 
+  before_validation :downcase_email
   before_save :set_random_hash
+
+  def downcase_email
+    self.email = self.email.downcase
+  end
 
   def array
     [self.first_choice, self.second_choice, self.third_choice]
@@ -43,7 +48,7 @@ class Vote < ActiveRecord::Base
   def candidates
     Candidate.find_by_sql %Q[
       SELECT c.*,
-      CASE REGEXP_REPLACE(c.name, '[^a-zA-Z]', '')
+      CASE REGEXP_REPLACE(c.name, '[^a-zA-Z]', '', 'g')
       WHEN '#{self.first_choice}' THEN 'first'
       WHEN '#{self.second_choice}' THEN 'second'
       WHEN '#{self.third_choice}' THEN 'third'
@@ -52,8 +57,8 @@ class Vote < ActiveRecord::Base
       FROM candidates c
       WHERE
       c.poll_id = #{self.poll_id} AND
-      c.show_on_ballot = 'true'
-      ORDER BY c.name IN ('#{self.first_choice}', '#{self.second_choice}', '#{self.third_choice}') ASC
+      c.show_on_ballot = true
+      ORDER BY REGEXP_REPLACE(c.name, '[^a-zA-Z]', '') IN ('#{self.first_choice}', '#{self.second_choice}', '#{self.third_choice}') ASC
     ]
   end
 
@@ -85,7 +90,7 @@ class Vote < ActiveRecord::Base
   end
 
   def share_link(domain)
-    "#{domain}/?r=#{self.random_hash}"
+    "#{domain}/#{self.poll.short_name}/?r=#{self.random_hash}"
   end
 
   def twitter_text
@@ -115,6 +120,7 @@ class Vote < ActiveRecord::Base
   end
 
   def rank
+    Vote.where(poll_id: self.poll_id).group(:first_choice).order('count(*) desc').count
     candidates = Vote.find_by_sql("SELECT votes.first_choice, COUNT(*) AS total FROM votes GROUP BY votes.first_choice ORDER BY COUNT(*) DESC")
     ( 1 + (candidates.index { |c| c['first_choice'] == self.top_choice } || Candidate.count) ).ordinalize
   end
