@@ -69,12 +69,16 @@ class Poll < ActiveRecord::Base
   end
 
   # Used to add votes to runner-ups when candidates are eliminated from the running
+  # For Postgres, use:
+  #   STRING_AGG(CONCAT(runner_up, ':', gain), ';') AS gains
+  # in replace of
+  #   GROUP_CONCAT(CONCAT(runner_up, ':', gain) SEPERATOR ';') AS gains
   def runoff_results
     Vote.find_by_sql("
       SELECT
         eliminated_candidate_1,
         eliminated_candidate_2,
-        STRING_AGG(CONCAT(runner_up, ':', gain), ';') AS gains
+        GROUP_CONCAT(CONCAT(runner_up, ':', gain) SEPARATOR ';') AS gains
       FROM
       (
         SELECT eliminated_candidate_1, eliminated_candidate_2, runner_up, COUNT(*) AS gain FROM

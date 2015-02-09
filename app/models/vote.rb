@@ -34,31 +34,40 @@ class Vote < ActiveRecord::Base
     self.id
   end
 
-   # Protect against SQL injection
+  # Protect against SQL injection
+  # For Postgres use:
+  #   gsub(/[^a-zA-Z]/, '')
+  # instead of:
+  #   gsub('\'', '')
   def first_choice
-    (self['first_choice'] || '').gsub(/[^a-zA-Z]/, '')
+    (self['first_choice'] || '').gsub('\'', '')
   end
   def second_choice
-    (self['second_choice'] || '').gsub(/[^a-zA-Z]/, '')
+    (self['second_choice'] || '').gsub('\'', '')
   end
   def third_choice
-    (self['third_choice'] || '').gsub(/[^a-zA-Z]/, '')
+    (self['third_choice'] || '').gsub('\'', '')
   end
 
+  # For Postgres use:
+  #   CASE REGEXP_REPLACE(c.name, '[^a-zA-Z]', '', 'g')
+  # instead of:
+  #   REPLACE(c.name, '''', '')
   def candidates
     Candidate.find_by_sql %Q[
-      SELECT c.*,
-      CASE REGEXP_REPLACE(c.name, '[^a-zA-Z]', '', 'g')
-      WHEN '#{self.first_choice}' THEN 'first'
-      WHEN '#{self.second_choice}' THEN 'second'
-      WHEN '#{self.third_choice}' THEN 'third'
-      ELSE NULL
+      SELECT
+        c.*,
+        CASE REPLACE(c.name, '''', '')
+        WHEN '#{self.first_choice}' THEN 'first'
+        WHEN '#{self.second_choice}' THEN 'second'
+        WHEN '#{self.third_choice}' THEN 'third'
+        ELSE NULL
       END AS ranking
       FROM candidates c
       WHERE
       c.poll_id = #{self.poll_id} AND
-      c.show_on_ballot = true
-      ORDER BY REGEXP_REPLACE(c.name, '[^a-zA-Z]', '') IN ('#{self.first_choice}', '#{self.second_choice}', '#{self.third_choice}') ASC
+      c.show_on_ballot = 1
+      ORDER BY REPLACE(c.name, '''', '') IN ('#{self.first_choice}', '#{self.second_choice}', '#{self.third_choice}') ASC
     ]
   end
 
