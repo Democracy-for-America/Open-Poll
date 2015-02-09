@@ -23,7 +23,7 @@
       <%= @vote.change_link(@domain) %></strong>
     </p>
 
-    <%= @vote.poll.email_closure %>
+    <%= @vote.poll.email_closure.html_safe %>
 
   </body>
 </html>
