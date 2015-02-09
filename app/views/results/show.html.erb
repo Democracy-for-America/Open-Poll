@@ -85,7 +85,7 @@
  </style>
 <![endif]-->  
 
-<% cache('results', expires_in: 60.minutes) do %>
+<% cache("results/#{@poll.id}", expires_in: 60.minutes) do %>
 
 <% @initial_results = @poll.initial_results %>
 <% @runoff_results = @poll.runoff_results %>
