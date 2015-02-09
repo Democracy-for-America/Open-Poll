@@ -6,11 +6,19 @@ class VotesController < ApplicationController
   end
 
   def new
-    @vote = Vote.new({poll_id: @poll.id})
+    if @poll.end_voting
+      render(:voting_has_ended)
+    else
+      @vote = params['hash'] ? (Vote.find_by_random_hash(params['hash']) || Vote.new) : Vote.new({poll_id: @poll.id})
+      params['i_voted_for'] = params['s']
+      if @parent = @vote.parent(params['r'])
+        params['i_voted_for'] = @parent.top_choice
+      end
+    end
   end
 
   def create
-    @vote = Vote.where(poll_id: @poll.id).find_by_email(vote_params['email']) || Vote.new(vote_params)
+    @vote = Vote.where(poll_id: @poll.id).find_by_email(vote_params['email'].downcase) || Vote.new(vote_params)
     @vote.poll_id = @poll.id
     @vote.ip_address = request.remote_ip
     @vote.session_cookie = session.id
@@ -18,7 +26,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if @vote.update(vote_params)
         VoteMailer.confirmation(@vote, @domain).deliver_later
-        format.html { redirect_to "/polls/#{params[:poll]}/votes/#{@vote.random_hash}" }
+        format.html { redirect_to "/#{params[:poll]}/votes/#{@vote.random_hash}" }
       else
         format.html { render action: 'new' }
       end

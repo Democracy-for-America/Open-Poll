@@ -1,4 +1,4 @@
-<%= simple_form_for(@vote, url: "/polls/#{params[:poll]}") do |f| %>
+<%= simple_form_for(@vote, url: "/#{params[:poll]}") do |f| %>
 
   <% if false && @vote.errors.any? %>
   <div id="error_explanation">

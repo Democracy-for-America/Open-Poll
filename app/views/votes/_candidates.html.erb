@@ -3,11 +3,11 @@
     <div style="color: #555;">
       <% if @parent %>
         <h4>
-          <%= @parent.name %>'s top draft pick for 2016 is <%= params['i_voted_for'] %>.
+          <%= @parent.name %>'s top draft pick for the <%= @poll.name %> is <%= params['i_voted_for'] %>.
         </h4>
       <% end %>
       <p>
-        Drag and drop your own top choices for the 2016 Democratic Presidential Primary into the above area!
+        Drag and drop your own top choices into the above area!
       </p>
     </div>
   <% end %>
