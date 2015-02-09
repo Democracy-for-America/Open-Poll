@@ -1,0 +1,12 @@
+<style>
+  body { padding-top: 200px; }
+</style>
+
+<div class="container" style="margin-bottom: 120px;">
+  <h3 style="text-align: center;">Voting has ended!</h3>
+  <% if @poll.show_results %>
+    <h3><%= link_to 'See results', "results", style: 'color: #004090;' %></h3>
+  <% else %>
+    <h3>Come back soon for results.</h3>
+  <% end %>
+</div>
