@@ -6,9 +6,10 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'polls/:poll/votes/:random_hash' => 'votes#show'
-  get 'polls/:poll' => 'votes#new'
-  post 'polls/:poll' => 'votes#create'
+  get ':poll/votes/:random_hash' => 'votes#show'
+  get ':poll' => 'votes#new'
+  post ':poll' => 'votes#create'
+  get ':poll/results' => 'results#show'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
