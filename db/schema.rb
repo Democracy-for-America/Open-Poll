@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209230728) do
+ActiveRecord::Schema.define(version: 20150209232748) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -62,6 +62,10 @@ ActiveRecord::Schema.define(version: 20150209230728) do
     t.datetime "facebook_image_updated_at"
     t.text     "results_text",                limit: 65535
     t.text     "custom_css",                  limit: 65535
+    t.string   "logo_file_name",              limit: 255
+    t.string   "logo_content_type",           limit: 255
+    t.integer  "logo_file_size",              limit: 4
+    t.datetime "logo_updated_at"
   end
 
   create_table "votes", force: :cascade do |t|

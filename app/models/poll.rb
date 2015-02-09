@@ -9,6 +9,9 @@ class Poll < ActiveRecord::Base
   has_attached_file :facebook_image
   validates_attachment :facebook_image, content_type: { content_type: /\Aimage\/.*\Z/ }
 
+  has_attached_file :logo, default_url: "dfa_clear.png"
+  validates_attachment :logo, content_type: { content_type: /\Aimage\/.*\Z/ }
+
   # Used on vote confirmation page to display top three candidates
   def results
     candidates = Candidate.find_by_sql("

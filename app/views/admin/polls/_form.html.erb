@@ -44,9 +44,14 @@
     <%= f.text_area :custom_css %>
   </div>
   <div class="field">
+    <%= f.label :logo %><br>
+    <%= f.file_field :logo %><br>
+    <%= image_tag @poll.logo, style: "max-width: 600px; background-color: #777;" %>
+  </div>
+  <div class="field">
     <%= f.label :facebook_image %><br>
     <%= f.file_field :facebook_image %><br>
-    <%= image_tag @poll.facebook_image, style: "max-width: 600px" %>
+    <%= image_tag @poll.facebook_image, style: "max-width: 600px;" %>
   </div>
   <div class="field">
     <%= f.label :end_voting %><br>
