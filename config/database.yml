@@ -5,10 +5,10 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: postgresql
+  adapter: mysql2
   database: open_poll
   host: localhost
-  username: user
+  username: open_poll_user
   password: password
 
 development:

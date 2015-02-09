@@ -13,35 +13,32 @@
 
 ActiveRecord::Schema.define(version: 20150209183536) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "candidates", force: :cascade do |t|
-    t.string   "name"
-    t.string   "office"
-    t.boolean  "show_on_ballot"
-    t.boolean  "show_in_results"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.integer  "poll_id"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
+    t.string   "name",               limit: 255
+    t.string   "office",             limit: 255
+    t.boolean  "show_on_ballot",     limit: 1
+    t.boolean  "show_in_results",    limit: 1
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "poll_id",            limit: 4
+    t.string   "image_file_name",    limit: 255
+    t.string   "image_content_type", limit: 255
+    t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
   end
 
   add_index "candidates", ["poll_id"], name: "index_candidates_on_poll_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
+    t.integer  "priority",   limit: 4,     default: 0, null: false
+    t.integer  "attempts",   limit: 4,     default: 0, null: false
+    t.text     "handler",    limit: 65535,             null: false
+    t.text     "last_error", limit: 65535
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
+    t.string   "locked_by",  limit: 255
+    t.string   "queue",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -49,41 +46,41 @@ ActiveRecord::Schema.define(version: 20150209183536) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "polls", force: :cascade do |t|
-    t.string   "title"
-    t.string   "subtitle"
-    t.string   "short_name"
-    t.boolean  "end_voting"
-    t.boolean  "show_results"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.string   "instructions"
-    t.string   "name"
-    t.text     "email_closure"
-    t.string   "facebook_image_file_name"
-    t.string   "facebook_image_content_type"
-    t.integer  "facebook_image_file_size"
+    t.string   "title",                       limit: 255
+    t.string   "subtitle",                    limit: 255
+    t.string   "short_name",                  limit: 255
+    t.boolean  "end_voting",                  limit: 1
+    t.boolean  "show_results",                limit: 1
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "instructions",                limit: 255
+    t.string   "name",                        limit: 255
+    t.text     "email_closure",               limit: 65535
+    t.string   "facebook_image_file_name",    limit: 255
+    t.string   "facebook_image_content_type", limit: 255
+    t.integer  "facebook_image_file_size",    limit: 4
     t.datetime "facebook_image_updated_at"
-    t.text     "results_text"
+    t.text     "results_text",                limit: 65535
   end
 
   create_table "votes", force: :cascade do |t|
-    t.string   "email"
-    t.string   "name"
-    t.string   "zip"
-    t.string   "first_choice"
-    t.string   "second_choice"
-    t.string   "third_choice"
-    t.string   "source"
-    t.integer  "actionkit_id"
-    t.string   "random_hash"
-    t.string   "ip_address"
-    t.string   "session_cookie"
-    t.text     "full_querystring"
-    t.integer  "referring_vote_id"
-    t.string   "referring_akid"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "poll_id"
+    t.string   "email",             limit: 255
+    t.string   "name",              limit: 255
+    t.string   "zip",               limit: 255
+    t.string   "first_choice",      limit: 255
+    t.string   "second_choice",     limit: 255
+    t.string   "third_choice",      limit: 255
+    t.string   "source",            limit: 255
+    t.integer  "actionkit_id",      limit: 4
+    t.string   "random_hash",       limit: 255
+    t.string   "ip_address",        limit: 255
+    t.string   "session_cookie",    limit: 255
+    t.text     "full_querystring",  limit: 65535
+    t.integer  "referring_vote_id", limit: 4
+    t.string   "referring_akid",    limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "poll_id",           limit: 4
   end
 
   add_index "votes", ["poll_id"], name: "index_votes_on_poll_id", using: :btree
