@@ -77,7 +77,17 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-   Paperclip::Attachment.default_options.merge!({
+  ActionMailer::Base.smtp_settings = {
+    user_name: ENV['SMTP_USER_NAME'],
+    password: ENV['SMTP_PASSWORD'],
+    domain: ENV['SMTP_DOMAIN'],
+    address: ENV['SMTP_ADDRESS'],
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
+
+  Paperclip::Attachment.default_options.merge!({
     :storage => :s3,
     :bucket => ENV['S3_BUCKET'],
     :s3_credentials => {
