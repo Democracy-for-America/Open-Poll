@@ -5,7 +5,7 @@ class Vote < ActiveRecord::Base
   VALID_ZIP_REGEX = /\A\d{5}(-\d{4})?\z/
   VALID_NAME_REGEX = /\S+\s\S+/
 
-  validates_uniqueness_of :email, case_sensitive: false
+  validates :email, uniqueness: { case_sensitive: false, scope: :poll_id }
   validates_format_of :email, {with: VALID_EMAIL_REGEX, message: "is invalid"}
   validates_format_of :name, {with: VALID_NAME_REGEX, message: "required"}
   validates_format_of :zip, {with: VALID_ZIP_REGEX, message: "is invalid"}
