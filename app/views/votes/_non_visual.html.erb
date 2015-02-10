@@ -4,10 +4,10 @@
   <div class="container">
     <div class="twelve columns">
       <p>
-        This site is a non-visual version of our <%= @poll.name %>. To view the visual version of this site, please visit <%= @domain %>/polls/<%= params[:poll] %>/.
+        <em>This is the non-visual version of our <%= @poll.name %>. To view the visual version of this site, please visit <%= link_to "#{@domain}/#{params[:poll]}", "#{@domain}/#{params[:poll]}/", class: "styled" %>.</em>
       </p>
       <p>
-        Democracy for America wants to know who you support. Some potential candidates are listed below. Write in any of their names in the form to the right, or choose your own write-in candidate!
+        Democracy for America wants to know who you support in our <%= @poll.name %>. Some potential candidates are listed below. Write in any of their names in the form to the right, or choose your own write-in candidate!
       </p>
       <p>
         <% @poll.candidates.visible.each do |c| %>
