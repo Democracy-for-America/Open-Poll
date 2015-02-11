@@ -117,7 +117,7 @@ class Vote < ActiveRecord::Base
   end
 
   def change_link(domain)
-    "#{domain}/votes/new?hash=#{self.random_hash}"
+    "#{domain}/#{self.poll.short_name}/?hash=#{self.random_hash}"
   end
 
   def top_choice
