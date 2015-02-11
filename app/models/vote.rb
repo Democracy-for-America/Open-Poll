@@ -140,13 +140,14 @@ class Vote < ActiveRecord::Base
     self
       .poll
       .email_template
-      .gsub('{{ first_name }}', self.name.split.first)
-      .gsub('{{ share_url }}', self.share_link(domain))
-      .gsub('{{ twitter_url }}', self.twitter_link(domain))
-      .gsub('{{ facebook_url }}', self.facebook_link(domain))
-      .gsub('{{ change_url }}', self.change_link(domain))
-      .gsub('{{ top_candidate }}', self.top_choice)
-      .gsub('{{ rank }}', self.rank)
-      .gsub('{{ keep_or_put }}', self.rank == '1st' ? 'keep' : 'put')
+      .gsub(/\{\{ *first_name *\}\}/, self.name.split.first)
+      .gsub(/\{\{ *share_url *\}\}/, self.share_link(domain))
+      .gsub(/\{\{ *twitter_url *\}\}/, self.twitter_link(domain))
+      .gsub(/\{\{ *facebook_url *\}\}/, self.facebook_link(domain))
+      .gsub(/\{\{ *change_url *\}\}/, self.change_link(domain))
+      .gsub(/\{\{ *top_candidate *\}\}/, self.top_choice)
+      .gsub(/\{\{ *rank *\}\}/, self.rank)
+      .gsub(/\{\{ *keep_or_put *\}\}/, self.rank == '1st' ? 'keep' : 'put')
+      .gsub(/\{\{.*\}\}/, '')
   end
 end
