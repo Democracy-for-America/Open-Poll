@@ -4,26 +4,6 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <p id="notice"><%= @vote.name.split.first %> –</p> 
-    <p>Thank you for submitting your vote in Democracy for America's <%= @vote.poll.name %>!</p>
-
-    <p>Your top pick, <%= @vote.top_choice %>, is currently in <%= rank = @vote.rank %> place!</p>
-    <p><strong>Now you can help your favorite candidate win by spreading the word and sharing your vote with your friends.</strong></p>
-
-    <p><strong><%= link_to 'Post to Facebook', "https://www.facebook.com/sharer/sharer.php?u=#{@vote.share_link(@domain)}", target: "_blank" %></strong></p>
-    <p><strong><%= link_to 'Share on Twitter', "https://twitter.com/intent/tweet?url=#{ CGI.escape @vote.share_link(@domain) }&text=#{ CGI.escape @vote.twitter_text }", target: "_blank" %></strong></p>
-
-    <p>
-      <strong>Or copy and paste this link to your top pick into an email:<br>
-      <%= @vote.share_link(@domain) %></strong>
-    </p>
-
-    <p>
-      <strong>If you want to change your vote at any time, use this link:<br>
-      <%= @vote.change_link(@domain) %></strong>
-    </p>
-
-    <%= @vote.poll.email_closure.html_safe %>
-
+    <%= @vote.thank_you_email(@domain).html_safe %>
   </body>
 </html>

@@ -98,6 +98,8 @@ class Vote < ActiveRecord::Base
     hash ? Vote.find_by_random_hash(hash) : nil
   end
 
+  # Various methods used for generating social media share URLs
+  # and other assorted snippets for use in after-action email
   def share_link(domain)
     "#{domain}/#{self.poll.short_name}/?r=#{self.random_hash}"
   end
@@ -131,5 +133,20 @@ class Vote < ActiveRecord::Base
   def rank
     candidates = Vote.select('votes.first_choice, COUNT(*) AS total').where(poll_id: self.poll_id).group(:first_choice).order('COUNT(*) DESC')
     ( 1 + (candidates.index { |c| c['first_choice'] == self.top_choice } || Candidate.count) ).ordinalize
+  end
+
+  # Allow for a set of white-listed instance methods to be accessed in the context of the after-action email, via {{ snippet }} tags.
+  def thank_you_email(domain)
+    self
+      .poll
+      .email_template
+      .gsub('{{ first_name }}', self.name.split.first)
+      .gsub('{{ share_url }}', self.share_link(domain))
+      .gsub('{{ twitter_url }}', self.twitter_link(domain))
+      .gsub('{{ facebook_url }}', self.facebook_link(domain))
+      .gsub('{{ change_url }}', self.change_link(domain))
+      .gsub('{{ top_candidate }}', self.top_choice)
+      .gsub('{{ rank }}', self.rank)
+      .gsub('{{ keep_or_put }}', self.rank == '1st' ? 'keep' : 'put')
   end
 end

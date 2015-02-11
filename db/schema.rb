@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209232748) do
+ActiveRecord::Schema.define(version: 20150210201103) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20150209232748) do
     t.datetime "updated_at",                                null: false
     t.string   "instructions",                limit: 255
     t.string   "name",                        limit: 255
-    t.text     "email_closure",               limit: 65535
+    t.text     "email_template",              limit: 65535
     t.string   "facebook_image_file_name",    limit: 255
     t.string   "facebook_image_content_type", limit: 255
     t.integer  "facebook_image_file_size",    limit: 4
