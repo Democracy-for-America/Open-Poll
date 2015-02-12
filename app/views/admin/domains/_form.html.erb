@@ -1,0 +1,17 @@
+<%= simple_form_for([:admin, @domain]) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="field">
+    <%= f.label :poll %><br>
+    <%= f.select :poll_id, options_for_select(@poll_select_options) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :domain %><br>
+    <%= f.text_field :domain %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

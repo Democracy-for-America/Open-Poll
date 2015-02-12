@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150211235627) do
+ActiveRecord::Schema.define(version: 20150212152245) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -44,6 +44,15 @@ ActiveRecord::Schema.define(version: 20150211235627) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "domains", force: :cascade do |t|
+    t.string   "domain",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "poll_id",    limit: 4
+  end
+
+  add_index "domains", ["poll_id"], name: "index_domains_on_poll_id", using: :btree
 
   create_table "polls", force: :cascade do |t|
     t.string   "title",                       limit: 255
