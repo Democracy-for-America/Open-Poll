@@ -115,7 +115,7 @@ class Vote < ActiveRecord::Base
   # and other assorted snippets for use in after-action email
   def share_link(domain, poll_slug)
     poll_slug ?
-    "#{domain}/#{self.poll.poll_slug}/?r=#{self.random_hash}" :
+    "#{domain}/#{poll_slug}/?r=#{self.random_hash}" :
     "#{domain}/?r=#{self.random_hash}"
   end
 
@@ -133,7 +133,7 @@ class Vote < ActiveRecord::Base
 
   def change_link(domain, poll_slug)
     poll_slug ?
-    "#{domain}/#{self.poll.poll_slug}/?hash=#{self.random_hash}" :
+    "#{domain}/#{poll_slug}/?hash=#{self.random_hash}" :
     "#{domain}/?hash=#{self.random_hash}"
   end
 
