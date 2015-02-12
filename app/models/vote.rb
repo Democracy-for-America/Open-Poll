@@ -29,9 +29,9 @@ class Vote < ActiveRecord::Base
 
   # Sync to ActionKit if ActionKit API connection is configured
   def build_actionkit_sync_job
-    ActionkitSyncJob.new(self) if Rails.application.secrets.actionkit_path && 
-                                  Rails.application.secrets.actionkit_username &&
-                                  Rails.application.secrets.actionkit_password
+    ActionkitSyncJob.perform_later(self) if ENV['ACTIONKIT_PATH'] &&
+                                            ENV['ACTIONKIT_USERNAME'] &&
+                                            ENV['ACTIONKIT_PASSWORD']
   end
 
   def downcase_email

@@ -27,7 +27,7 @@
     <%= f.label :short_name %><br>
     <%= f.text_field :short_name %>
   </div>
-  <% if Rails.application.secrets.actionkit_path && Rails.application.secrets.actionkit_username && Rails.application.secrets.actionkit_password %>
+  <% if ENV['ACTIONKIT_PATH'] && ENV['ACTIONKIT_USERNAME'] && ENV['ACTIONKIT_PASSWORD'] %>
   <div class="field">
     <%= f.label :actionkit_page %><br>
     <%= f.text_field :actionkit_page %>
