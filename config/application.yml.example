@@ -1,0 +1,28 @@
+development:
+  ADMIN_USER: 'admin'
+  ADMIN_PASSWORD: 'password'
+  ACTIONKIT_PATH: 'https://roboticdogs.actionkit.com/rest/v1/'
+  ACTIONKIT_USERNAME: 'actionkit_username'
+  ACTIONKIT_PASSWORD: 'actionkit_password'
+
+test:
+  ADMIN_USER: 'admin'
+  ADMIN_PASSWORD: 'password'
+  ACTIONKIT_PATH: 'https://roboticdogs.actionkit.com/rest/v1/'
+  ACTIONKIT_USERNAME: 'actionkit_username'
+  ACTIONKIT_PASSWORD: 'actionkit_password'
+
+production:
+  ADMIN_USER: 'admin'
+  ADMIN_PASSWORD: 'password'
+  ACTIONKIT_PATH: 'https://example.actionkit.com/rest/v1/'
+  ACTIONKIT_USERNAME: 'actionkit_username'
+  ACTIONKIT_PASSWORD: 'actionkit_password'
+  S3_BUCKET: beach_bucket.democracyforamerica.com'
+  AWS_ACCESS_KEY_ID: 'access_key'
+  AWS_SECRET_ACCESS_KEY: 'secret_key'
+  SMTP_USER_NAME: 'sendgrid_user'
+  SMTP_PASSWORD: 'sendgrid_password'
+  SMTP_DOMAIN: 'example.com'
+  SMTP_ADDRESS: 'smtp.sendgrid.net'
+  DATABASE_URL: 'mysql2://user:password@host/database'
