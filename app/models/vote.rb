@@ -1,6 +1,10 @@
 class Vote < ActiveRecord::Base
   belongs_to :poll
 
+  include AkSyncable
+  syncs_to -> { self.poll.actionkit_page }
+  @@synced_attributes = [:name, :email, :zip, :first_choice, :second_choice, :third_choice, :vote_id, :referring_vote_id, :referring_akid, :source]
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   VALID_ZIP_REGEX = /\A\d{5}(-\d{4})?\z/
   VALID_NAME_REGEX = /\S+\s\S+/
@@ -21,6 +25,14 @@ class Vote < ActiveRecord::Base
 
   before_validation :downcase_email
   before_save :set_random_hash
+  after_save :build_actionkit_sync_job
+
+  # Sync to ActionKit if ActionKit API connection is configured
+  def build_actionkit_sync_job
+    ActionkitSyncJob.new(self) if Rails.application.secrets.actionkit_path && 
+                                  Rails.application.secrets.actionkit_username &&
+                                  Rails.application.secrets.actionkit_password
+  end
 
   def downcase_email
     self.email = self.email.downcase
