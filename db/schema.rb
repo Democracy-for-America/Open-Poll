@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210201103) do
+ActiveRecord::Schema.define(version: 20150211235627) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20150210201103) do
     t.string   "logo_content_type",           limit: 255
     t.integer  "logo_file_size",              limit: 4
     t.datetime "logo_updated_at"
+    t.string   "actionkit_page",              limit: 255
   end
 
   create_table "votes", force: :cascade do |t|
