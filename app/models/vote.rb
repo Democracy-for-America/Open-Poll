@@ -153,7 +153,7 @@ class Vote < ActiveRecord::Base
   end
 
   # Allow for a set of white-listed instance methods to be accessed in the context of the after-action email, via {{ snippet }} tags.
-  def thank_you_email(domain, short_name)
+  def thank_you_email(domain, poll_slug)
     self
       .poll
       .email_template
