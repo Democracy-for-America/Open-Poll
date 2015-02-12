@@ -22,7 +22,6 @@ class VotesController < ApplicationController
     @vote.poll_id = @poll.id
     @vote.ip_address = request.remote_ip
     @vote.session_cookie = session.id
-    # drag = params[:drag]
     respond_to do |format|
       if @vote.update(vote_params)
         VoteMailer.confirmation(@vote, @domain, params[:poll]).deliver_later
