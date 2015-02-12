@@ -14,6 +14,7 @@ class Poll < ActiveRecord::Base
 
   # Used on vote confirmation page to display top three candidates
   def results
+    sleep 3
     candidates = Candidate.find_by_sql("
       SELECT
         candidates.name AS first_choice,
@@ -36,6 +37,7 @@ class Poll < ActiveRecord::Base
   # Used to generate intital bar graph display when results page is loaded,
   # before a user has eliminated any candidates from the running.
   def initial_results
+    sleep 3
     Candidate.find_by_sql("
       SELECT
       c.*,
