@@ -27,6 +27,12 @@
     <%= f.label :short_name %><br>
     <%= f.text_field :short_name %>
   </div>
+  <% if Rails.application.secrets.actionkit_path && Rails.application.secrets.actionkit_username && Rails.application.secrets.actionkit_password %>
+  <div class="field">
+    <%= f.label :actionkit_page %><br>
+    <%= f.text_field :actionkit_page %>
+  </div>
+  <% end %>
   <div class="field">
     <%= f.label :instructions %><br>
     <%= f.text_area :instructions %>

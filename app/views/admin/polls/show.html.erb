@@ -20,6 +20,13 @@
   <%= @poll.short_name %>
 </p>
 
+<% if Rails.application.secrets.actionkit_path && Rails.application.secrets.actionkit_username && Rails.application.secrets.actionkit_password %>
+<p>
+  <strong>Actionkit page:</strong>
+  <%= @poll.actionkit_page %>
+</p>
+<% end %>
+
 <p>
   <strong>Instructions:</strong><br>
   <%= @poll.instructions %>
