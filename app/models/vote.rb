@@ -7,7 +7,7 @@ class Vote < ActiveRecord::Base
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   VALID_ZIP_REGEX = /\A\d{5}(-\d{4})?\z/
-  VALID_NAME_REGEX = /\S+\s\S+/
+  VALID_NAME_REGEX = /\S+\s+\S+/
 
   validates :email, uniqueness: { case_sensitive: false, scope: :poll_id }
   validates_format_of :email, {with: VALID_EMAIL_REGEX, message: "is invalid"}
@@ -152,14 +152,14 @@ class Vote < ActiveRecord::Base
     self
       .poll
       .email_template
-      .gsub(/\{\{ *first_name *\}\}/, self.name.split.first)
-      .gsub(/\{\{ *share_url *\}\}/, self.share_link(domain))
-      .gsub(/\{\{ *twitter_url *\}\}/, self.twitter_link(domain))
-      .gsub(/\{\{ *facebook_url *\}\}/, self.facebook_link(domain))
-      .gsub(/\{\{ *change_url *\}\}/, self.change_link(domain))
-      .gsub(/\{\{ *top_candidate *\}\}/, self.top_choice)
-      .gsub(/\{\{ *rank *\}\}/, self.rank)
-      .gsub(/\{\{ *keep_or_put *\}\}/, self.rank == '1st' ? 'keep' : 'put')
+      .gsub(/\{\{\s*first_name\s*\}\}/, self.name.split.first)
+      .gsub(/\{\{\s*share_url\s*\}\}/, self.share_link(domain))
+      .gsub(/\{\{\s*twitter_url\s*\}\}/, self.twitter_link(domain))
+      .gsub(/\{\{\s*facebook_url\s*\}\}/, self.facebook_link(domain))
+      .gsub(/\{\{\s*change_url\s*\}\}/, self.change_link(domain))
+      .gsub(/\{\{\s*top_candidate\s*\}\}/, self.top_choice)
+      .gsub(/\{\{\s*rank\s*\}\}/, self.rank)
+      .gsub(/\{\{\s*keep_or_put\s*\}\}/, self.rank == '1st' ? 'keep' : 'put')
       .gsub(/\{\{.*\}\}/, '')
   end
 end
