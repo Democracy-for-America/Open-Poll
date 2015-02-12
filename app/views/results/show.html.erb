@@ -85,7 +85,7 @@
  </style>
 <![endif]-->  
 
-<% cache("results/#{@poll.id}", expires_in: 60.minutes) do %>
+<!-- cache("results/#{@poll.id}") do -->
 
 <% @initial_results = @poll.initial_results %>
 <% @runoff_results = @poll.runoff_results %>
@@ -133,7 +133,7 @@ runoff_results = [
   <%= @runoff_results.map { |r| '{eliminated_candidates: ["' + r.eliminated_candidate_1.upcase.gsub('"', '&quot;') + '"' + (r.eliminated_candidate_2 ? ', "' + r.eliminated_candidate_2.upcase.gsub('"', '&quot;') + '"' : '') + '], runners_up: {' + r.gains.upcase.gsub('"', '&quot;').split(';').map{ |g| '"' + g.gsub(':', '": ') }.join(', ') + '}}' }.join(",\n  ").html_safe %>
 ];
 
-<% end %>
+<!-- end -->
 
 eliminated_candidates = [];
 
