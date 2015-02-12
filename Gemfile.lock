@@ -80,6 +80,7 @@ GEM
     delayed_job_active_record (4.0.3)
       activerecord (>= 3.0, < 5.0)
       delayed_job (>= 3.0, < 4.1)
+    demoji (0.0.5)
     erubis (2.7.0)
     eventmachine (1.0.7)
     execjs (2.3.0)
@@ -211,6 +212,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   delayed_job_active_record
+  demoji
   figaro
   httparty
   jbuilder (~> 2.0)
