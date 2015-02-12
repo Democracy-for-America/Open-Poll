@@ -4,6 +4,6 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <%= @vote.thank_you_email(@domain).html_safe %>
+    <%= @vote.thank_you_email(@domain, @poll_slug).html_safe %>
   </body>
 </html>

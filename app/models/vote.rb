@@ -113,24 +113,28 @@ class Vote < ActiveRecord::Base
 
   # Various methods used for generating social media share URLs
   # and other assorted snippets for use in after-action email
-  def share_link(domain)
-    "#{domain}/#{self.poll.short_name}/?r=#{self.random_hash}"
+  def share_link(domain, poll_slug)
+    poll_slug ?
+    "#{domain}/#{self.poll.poll_slug}/?r=#{self.random_hash}" :
+    "#{domain}/?r=#{self.random_hash}"
   end
 
   def twitter_text
     "Find out who I voted for in Democracy for America's #{self.poll.name}, and submit your top picks!"
   end
 
-  def twitter_link(domain)
-    "https://twitter.com/intent/tweet?url=#{ CGI.escape self.share_link(domain) }&text=#{ CGI.escape self.twitter_text }"
+  def twitter_link(domain, poll_slug)
+    "https://twitter.com/intent/tweet?url=#{ CGI.escape self.share_link(domain, poll_slug) }&text=#{ CGI.escape self.twitter_text }"
   end
 
-  def facebook_link(domain)
-    "https://www.facebook.com/sharer/sharer.php?u=#{self.share_link(domain)}"
+  def facebook_link(domain, poll_slug)
+    "https://www.facebook.com/sharer/sharer.php?u=#{self.share_link(domain, poll_slug)}"
   end
 
-  def change_link(domain)
-    "#{domain}/#{self.poll.short_name}/?hash=#{self.random_hash}"
+  def change_link(domain, poll_slug)
+    poll_slug ?
+    "#{domain}/#{self.poll.poll_slug}/?hash=#{self.random_hash}" :
+    "#{domain}/?hash=#{self.random_hash}"
   end
 
   def top_choice
@@ -149,15 +153,15 @@ class Vote < ActiveRecord::Base
   end
 
   # Allow for a set of white-listed instance methods to be accessed in the context of the after-action email, via {{ snippet }} tags.
-  def thank_you_email(domain)
+  def thank_you_email(domain, short_name)
     self
       .poll
       .email_template
       .gsub(/\{\{\s*first_name\s*\}\}/, self.name.split.first)
-      .gsub(/\{\{\s*share_url\s*\}\}/, self.share_link(domain))
-      .gsub(/\{\{\s*twitter_url\s*\}\}/, self.twitter_link(domain))
-      .gsub(/\{\{\s*facebook_url\s*\}\}/, self.facebook_link(domain))
-      .gsub(/\{\{\s*change_url\s*\}\}/, self.change_link(domain))
+      .gsub(/\{\{\s*share_url\s*\}\}/, self.share_link(domain, poll_slug))
+      .gsub(/\{\{\s*twitter_url\s*\}\}/, self.twitter_link(domain, poll_slug))
+      .gsub(/\{\{\s*facebook_url\s*\}\}/, self.facebook_link(domain, poll_slug))
+      .gsub(/\{\{\s*change_url\s*\}\}/, self.change_link(domain, poll_slug))
       .gsub(/\{\{\s*top_candidate\s*\}\}/, self.top_choice)
       .gsub(/\{\{\s*rank\s*\}\}/, self.rank)
       .gsub(/\{\{\s*keep_or_put\s*\}\}/, self.rank == '1st' ? 'keep' : 'put')

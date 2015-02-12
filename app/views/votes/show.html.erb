@@ -10,12 +10,12 @@
   </p>
 
   <p class="add-bottom" style="text-align: center;">
-    <%= link_to image_tag('facebook.png', alt: 'Facebook'), @vote.facebook_link(@domain), class: "social", target: "_blank" %>
-    <%= link_to image_tag('twitter.png', alt: 'Twitter'), @vote.twitter_link(@domain), class: "social", target: "_blank" %><br>
+    <%= link_to image_tag('facebook.png', alt: 'Facebook'), @vote.facebook_link(@domain, params[:poll]), class: "social", target: "_blank" %>
+    <%= link_to image_tag('twitter.png', alt: 'Twitter'), @vote.twitter_link(@domain, params[:poll]), class: "social", target: "_blank" %><br>
   </p>
 
   <p class="add-bottom" style="text-align: center;">
-    <strong style="font-size: 22px;">LINK TO SHARE YOUR TOP PICK:<br /></strong><span style="font-size: 18px;"><%= @vote.share_link(@domain) %></span><br><br>
+    <strong style="font-size: 22px;">LINK TO SHARE YOUR TOP PICK:<br /></strong><span style="font-size: 18px;"><%= @vote.share_link(@domain, params[:poll]) %></span><br><br>
   </p>
 
   <p class="half-bottom" style="text-align: center;">
