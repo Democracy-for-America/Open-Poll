@@ -43,6 +43,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    airbrake (4.1.0)
+      builder
+      multi_json
     arel (6.0.0)
     aws-sdk (1.53.0)
       aws-sdk-v1 (= 1.53.0)
@@ -201,6 +204,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake
   ak_syncable!
   aws-sdk (< 2.0)
   byebug
