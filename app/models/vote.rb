@@ -31,7 +31,8 @@ class Vote < ActiveRecord::Base
   def build_actionkit_sync_job
     ActionkitSyncJob.perform_later(self) if ENV['ACTIONKIT_PATH'] &&
                                             ENV['ACTIONKIT_USERNAME'] &&
-                                            ENV['ACTIONKIT_PASSWORD']
+                                            ENV['ACTIONKIT_PASSWORD'] &&
+                                            !self.poll.actionkit_page.blank?
   end
 
   def downcase_email
