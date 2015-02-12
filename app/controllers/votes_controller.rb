@@ -37,6 +37,7 @@ class VotesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_poll
       @poll = Poll.find_by_short_name(params[:poll])
+      render(file: "#{Rails.root}/public/404", layout: false, status: '404') if @poll.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
