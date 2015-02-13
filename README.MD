@@ -8,7 +8,7 @@ OpenPoll works by allowing voters to select their top three candidates for an up
 
 OpenPoll provides a responsive drag and drop interface, built with [hammer.js](http://hammerjs.github.io/). A non-visual interface is provided for users accessing the app with screen readers, or those otherwise experiencing difficulty with the visual interface.
 
-Visitors may explore results via a run-off style interface, allowing to add and remove candidates from the running, to find out what an electoral race would look like with different sets of candidates. When a visitor loads a poll's results page, results are first calculated based on voters' first choices. From there, visitors may remove candidates from the running, causing votes to go follow-up candidates.
+Visitors may explore results via a run-off style interface, to find out what an electoral race would look like with various sets of candidates. When a visitor loads a poll's results page, results are first calculated based on voters' first choices. From there, visitors may remove candidates from the running, causing votes to go follow-up candidates.
 
 OpenPoll was created with Rails 4.2.
 
