@@ -3,19 +3,6 @@ class ResultsController < ApplicationController
 
   def show
     render(:come_back_soon) unless @poll.show_results
-    @initial_results = Rails.cache.fetch "results/initial/#{@poll.id}" do
-      @poll.initial_results
-    end
-    @runoff_results = Rails.cache.fetch "results/runoff/#{@poll.id}" do
-      @poll.runoff_results
-    end
-
-    # "Dummy" cache value.
-    # When it expires, it will trigger the asynchrounous refresh of more expensive cached objects
-    @timestamp = Rails.cache.fetch "foo", expires_in: 30.seconds do
-      CacheRefreshJob.perform_later(@poll)
-      Time.now
-    end
   end
 
   private
