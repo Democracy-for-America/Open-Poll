@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'admin' => 'admin/static_pages#index'
+
   namespace :admin do
     resources :polls do
       resources :candidates
