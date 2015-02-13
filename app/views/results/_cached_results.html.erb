@@ -1,0 +1,43 @@
+<% @max_votes = @initial_results[0]['total'] %>
+<% @total_votes = @poll.votes.count %>
+
+<div class="container">
+  <h3 class="add-bottom"><%= @poll.results_text.html_safe %></h3>
+  <% unless @poll.end_voting %><p style="text-align: center;">Haven't voted yet? <a href="/<%= @poll.short_name %>" style="color: #049; border-bottom: dashed 1px #049;">Vote now!</a></p><% end %>
+  <ul id="active">
+  <% @initial_results.each do |c| %>
+    <li class="candidate_row" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>" onclick='addToEliminatedCandidates("<%= c.top_choice.upcase %>");'>
+      <%= image_tag(c.image(:thumb), class: "candidate_icon") %>
+      <div class="bar_wrapper"><div class="bar" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>" style="width: <%= 0.1 * (1000.0 * c.total / @max_votes ).floor %>%;"><strong>  <%= c.top_choice %>:</strong> <span class="value" data-name="<%= c.top_choice.upcase %>"><%= (100.0 * c.total / @total_votes).round(2) %>%</span></div></div>
+    </li>
+  <% end %>
+  </ul>
+  <p style="text-align: center; color: #777; font-size: 16px;">
+    Share these results:<br>
+    <%= link_to image_tag('facebook.png'), "http://facebook.com/sharer/sharer.php?u=#{CGI.escape @domain}%2Fresults", class: "social", target: "_blank" %>
+  </p>
+</div>
+
+</div>
+<!-- END div#main-wrap -->
+
+<div id="removed">
+  <% @initial_results.each do |c| %><div class="ex_candidate"
+    style="" onclick='removeFromEliminatedCandidates("<%= c.top_choice.upcase %>");'>
+      <div class="hider-btn" data-name="<%= c.top_choice.upcase %>" style="">
+        <%= image_tag(c.image(:thumb), style: "height: 60px; width: 60px; border-radius: 10px;") %>
+        <br>
+        <%= c.top_choice %>
+      </div>
+    </div
+  ><% end %>
+</div>
+
+<script>
+initial_results = {
+  <%= @initial_results.map { |c| '"' + c.top_choice.upcase.gsub('"', '&quot;') + '": ' + c.total.to_s }.join(",\n  ").html_safe %>
+};
+
+runoff_results = [
+  <%= @runoff_results.map { |r| '{eliminated_candidates: ["' + r.eliminated_candidate_1.upcase.gsub('"', '&quot;') + '"' + (r.eliminated_candidate_2 ? ', "' + r.eliminated_candidate_2.upcase.gsub('"', '&quot;') + '"' : '') + '], runners_up: {' + r.gains.upcase.gsub('"', '&quot;').split(';').map{ |g| '"' + g.gsub(':', '": ') }.join(', ') + '}}' }.join(",\n  ").html_safe %>
+];
