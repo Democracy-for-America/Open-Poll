@@ -72,6 +72,7 @@ GEM
     coffee-script-source (1.9.0)
     columnize (0.9.0)
     daemons (1.1.9)
+    dalli (2.7.2)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
     delayed_job (4.0.6)
@@ -209,6 +210,7 @@ DEPENDENCIES
   aws-sdk (< 2.0)
   byebug
   coffee-rails (~> 4.1.0)
+  dalli
   delayed_job_active_record
   demoji
   figaro

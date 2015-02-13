@@ -26,3 +26,6 @@ production:
   SMTP_DOMAIN: 'example.com'
   SMTP_ADDRESS: 'smtp.sendgrid.net'
   DATABASE_URL: 'mysql2://user:password@host/database'
+  MEMCACHEDCLOUD_SERVERS: 'pub-memcache-12345.aws-region.ec2.example.com:67890'
+  MEMCACHEDCLOUD_PASSWORD: 'password'
+  MEMCACHEDCLOUD_USERNAME: 'memcached-app12345678'

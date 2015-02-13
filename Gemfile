@@ -43,6 +43,9 @@ end
 group :production do
   # Use Thin as the app server
   gem 'thin'
+
+  # Use MemCached
+  gem 'dalli'
 end
 
 # Project specific gems:
