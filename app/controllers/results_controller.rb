@@ -3,6 +3,8 @@ class ResultsController < ApplicationController
 
   def show
     render(:come_back_soon) unless @poll.show_results
+    @facebook_title = @poll.results_page_og_title
+    @facebook_description = @poll.results_page_og_description
   end
 
   private

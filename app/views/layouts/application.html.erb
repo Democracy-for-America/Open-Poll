@@ -7,16 +7,9 @@
   <%= csrf_meta_tags %>
   <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
-  <% if params[:action] == 'results' %>
-    <meta name="description" property="og:description" content="Curious how DFA's member poll might look with or without potential candidates? Just click on any candidate to remove (or add) them to the final results!">
-    <meta property="og:title" content="FINAL RESULTS: Democracy for America's <%= @poll.name %>">
-    <meta property="og:url" content="<%= @domain + request.fullpath %>">
-  <% else %>
-    <meta name="description" property="og:description" content="Find out who I voted for in Democracy for America's <%= @poll.name %>, and submit your top picks!">
-    <meta property="og:title" content="My top pick is...">  
-    <meta property="og:url" content="<%= @domain %>">
-  <% end %>
-  
+  <meta name="description" property="og:description" content="<%= @facebook_description || @poll.vote_page_facebook_description %>">
+  <meta property="og:title" content="<%= @facebook_title || @poll.vote_page_facebook_title %>">
+  <meta property="og:url" content="<%= @domain + request.fullpath %>">
   <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
 
   <link rel="icon" type="image/x-icon" href="<%= image_url 'favicon.ico' %>" />
