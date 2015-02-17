@@ -25,17 +25,20 @@
   </div>
   <div class="field">
     <%= f.label :url_slug %><br>
-    <%= f.text_field :short_name %>
+    <%= f.text_field :short_name %><br>
+    <label class="instructions">Entering "2016" will create <%= @domain %>/2016 as your poll's landing page.</label>
   </div>
   <% if ENV['ACTIONKIT_PATH'] && ENV['ACTIONKIT_USERNAME'] && ENV['ACTIONKIT_PASSWORD'] %>
   <div class="field">
     <%= f.label :actionkit_page %><br>
-    <%= f.text_field :actionkit_page %>
+    <%= f.text_field :actionkit_page %><br>
+    <label class="instructions">Enter an ActionKit page name, e.g. "2016-progressive-poll," or leave blank to disable ActionKit syncing.</label>
   </div>
   <% end %>
   <div class="field">
     <%= f.label :donation_page_url %><br>
-    <%= f.text_field :donation_url %>
+    <%= f.text_field :donation_url %><br>
+    <label class="instructions">Enter the URL for a donation page to link to from the after-action page.</label>
   </div>
   <div class="field">
     <%= f.label :voting_instructions %><br>
@@ -43,10 +46,11 @@
   </div>
   <div class="field">
     <%= f.label :thank_you_email_template %><br>
+    <label class="instructions">You may use standard HTML tags to format your email. <a href="https://github.com/Democracy-for-America/Open-Poll#thank-you-email" target="_blank">(See available snippets)</a></label><br>
     <%= f.text_area :email_template %>
   </div>
   <div class="field">
-    <%= f.label :results_instruction %><br>
+    <%= f.label :results_instructions %><br>
     <%= f.text_area :results_text %>
   </div>
   <div class="field">

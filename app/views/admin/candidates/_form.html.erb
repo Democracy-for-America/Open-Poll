@@ -21,6 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :image %><br>
+    <label>(Candidate images should be 200 x 200 pixel squares.)</label><br>
     <%= f.file_field :image %><br>
     <%= image_tag @candidate.image(:thumb) %>
   </div>

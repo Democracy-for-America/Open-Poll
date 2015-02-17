@@ -16,7 +16,7 @@ class Admin::PollsController < ApplicationController
 
   # GET /polls/new
   def new
-    @poll = Poll.new
+    @poll = Poll.new_with_defaults
   end
 
   # GET /polls/1/edit
@@ -30,7 +30,7 @@ class Admin::PollsController < ApplicationController
 
     respond_to do |format|
       if @poll.save
-        format.html { redirect_to admin_poll_path(@poll), notice: 'Poll was successfully created.' }
+        format.html { redirect_to admin_poll_candidates_path(@poll), notice: 'Poll was successfully created. Now it\'s time to add some candidates.' }
         format.json { render :show, status: :created, location: @poll }
       else
         format.html { render :new }

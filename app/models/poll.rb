@@ -12,6 +12,39 @@ class Poll < ActiveRecord::Base
   has_attached_file :logo, default_url: "dfa_clear.png"
   validates_attachment :logo, content_type: { content_type: /\Aimage\/.*\Z/ }
 
+  # Create a poll with pre-filled fields
+  def self.new_with_defaults
+    @poll = Poll.new
+    @poll.title          =  'PULSE POLL: WHO SHOULD RUN?'
+    @poll.subtitle       =  'Choose your top 3 draft picks'
+    @poll.donation_url   =  'https://secure.actblue.com/contribute/page/democracyforamericacontribute'
+    @poll.instructions   =  'Drag and drop your top choices for the [POLL NAME] from the list below into this area.'
+    @poll.results_text   =  'Democracy for America members cast [TOTAL VOTES] votes for up to three favorite potential candidates in DFA\'s [POLL NAME]. Curious how the final results might look with or without specific candidates included in various primary scenarios? <strong>Just click on any candidate to remove (or add) them to the results.</strong>'
+    @poll.email_template =
+'<p id="notice">{{ first_name }} –</p>
+<p>Thank you for submitting your vote in Democracy for America\'s [POLL NAME]!</p>
+<p>Your top pick, {{ top_candidate }}, is currently in {{ rank }} place!</p>
+<p><strong>Now you can help your favorite candidate win by spreading the word and sharing your vote with your friends.</strong></p>
+<p><strong><a href="{{ facebook_url }}", target: "_blank">Post to Facebook</a></strong></p>
+<p><strong><a href="{{ twitter_url }}" target="_blank">Share on Twitter</a></strong></p>
+<p>
+<strong>Or copy and paste this link to your top pick into an email:<br>
+{{ share_url }}</strong>
+</p>
+<p>
+<strong>If you want to change your vote at any time, use this link:<br>{{ change_url }}</strong>
+</p>
+<p>DFA’s [POLL NAME] will end on <strong>[DATE], at [TIME]</strong>. We will announce the results later that week. </p>
+<p>
+<strong><a href=\'https://secure.actblue.com/contribute/page/democracyforamericacontribute\'>Please chip in $3 to help Democracy for America\'s work to amplify your voice in the [UPCOMING PRIMARY ELECTION].</a></strong>
+</p>
+<p>Thanks so much. Together, we will work to make sure the strongest possible candidate wins the [UPCOMING PRIMARY ELECTION] -- and goes on to win the [OFFICE].</p>
+<p>- Jay</p>
+<p>Jay Henderson, Campaign Manager <br>
+Democracy for America</p>'
+    return @poll
+  end
+
   # Used on vote confirmation page to display top three candidates
   def results
     candidates = Candidate.find_by_sql("
