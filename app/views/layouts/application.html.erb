@@ -7,8 +7,8 @@
   <%= csrf_meta_tags %>
   <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
-  <meta name="description" property="og:description" content="<%= @facebook_description || @poll.vote_page_facebook_description %>">
-  <meta property="og:title" content="<%= @facebook_title || @poll.vote_page_facebook_title %>">
+  <meta name="description" property="og:description" content="<%= @facebook_description || @poll.vote_page_og_description %>">
+  <meta property="og:title" content="<%= @facebook_title || @poll.vote_page_og_title %>">
   <meta property="og:url" content="<%= @domain + request.fullpath %>">
   <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
 
