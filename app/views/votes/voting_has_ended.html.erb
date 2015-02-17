@@ -5,7 +5,7 @@
 <div class="container" style="margin-bottom: 160px;">
   <h3 style="text-align: center;">Voting has ended!</h3>
   <% if @poll.show_results %>
-    <h3><%= link_to 'Click here to see the final results.', 'results/', class: 'styled' %></h3>
+    <h3><%= link_to 'Click here to see the final results.', params[:poll] ? "/#{params[:poll]}/results/" : "/results/", class: 'styled' %></h3>
   <% else %>
     <h3>Come back soon for results.</h3>
   <% end %>
