@@ -20,6 +20,11 @@ class Poll < ActiveRecord::Base
     @poll.donation_url   =  'https://secure.actblue.com/contribute/page/democracyforamericacontribute'
     @poll.instructions   =  'Drag and drop your top choices for the [POLL NAME] from the list below into this area.'
     @poll.results_text   =  'Democracy for America members cast [TOTAL VOTES] votes for up to three favorite potential candidates in DFA\'s [POLL NAME]. Curious how the final results might look with or without specific candidates included in various primary scenarios? <strong>Just click on any candidate to remove (or add) them to the results.</strong>'
+    @poll.results_page_og_description = 'Curious how DFA\'s member poll might look with or without potential candidates? Just click on any candidate to remove (or add) them to the final results!'
+    @poll.results_page_og_title = 'FINAL RESULTS: Democracy for America\'s [POLL NAME]'
+    @poll.vote_page_og_description = 'Find out who I voted for in Democracy for America\'s [POLL NAME], and submit your top picks!'
+    @poll.vote_page_og_title = 'My top pick is...'
+    @poll.twitter_text = 'Find out who I voted for in Democracy for America\'s [POLL NAME], and submit your top picks!'
     @poll.email_template =
 '<p id="notice">{{ first_name }} –</p>
 <p>Thank you for submitting your vote in Democracy for America\'s [POLL NAME]!</p>

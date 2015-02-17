@@ -119,12 +119,8 @@ class Vote < ActiveRecord::Base
     "#{domain}/?r=#{self.random_hash}"
   end
 
-  def twitter_text
-    "Find out who I voted for in Democracy for America's #{self.poll.name}, and submit your top picks!"
-  end
-
   def twitter_link(domain, poll_slug)
-    "https://twitter.com/intent/tweet?url=#{ CGI.escape self.share_link(domain, poll_slug) }&text=#{ CGI.escape self.twitter_text }"
+    "https://twitter.com/intent/tweet?url=#{ CGI.escape self.share_link(domain, poll_slug) }&text=#{ CGI.escape self.poll.twitter_text }"
   end
 
   def facebook_link(domain, poll_slug)

@@ -71,5 +71,9 @@ div {
 }
 
 textarea { width: 600px; height: 175px; }
+input[type=text] { width: 600px; }
+fieldset { display: block; width: 620px; border: solid 1px #999; border-radius: 2px; margin-bottom: 20px;}
+
+legend { font-weight: bold; font-size: 16px; }
 
 .instructions { color: #777; }
