@@ -4,7 +4,7 @@
       <div id="title-wrapper">
         <span id="main-title"><%= @poll.title %></span>
         <br>
-        <span id="sub-title"><% if @subtitle %><%= @subtitle %><% else %><%= @poll.subtitle %><% end %></span>
+        <span id="sub-title"><%= @subtitle || @poll.subtitle %></span>
       </div>
       <div style="display: inline-block; width: 100%;">&nbsp;</div>
     </div>
