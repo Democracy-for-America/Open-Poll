@@ -103,8 +103,14 @@ class Vote < ActiveRecord::Base
     self.candidates.select{ |c| c.ranking.nil? }
   end
 
+  # Create a random-looking string to ID votes for the purpose of referral tracking, etc.
+  # Use the current Unix timestamp to decrease the odds of a collision
   def set_random_hash
-    self.random_hash ||= SecureRandom.urlsafe_base64(16)
+    self.random_hash ||= lambda{
+      r = SecureRandom.urlsafe_base64(12)
+      t = Time.now.to_i.to_s
+      r[0..1] + t[0..1] + r[2..3] + t[2..3] + r[4..5] + t[4..5] + r[6..7] + t[6..7] + r[8..9] + t[8..9] + r[10..11]
+    }.call
   end
 
   def parent(hash)
