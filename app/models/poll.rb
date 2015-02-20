@@ -3,7 +3,6 @@ class Poll < ActiveRecord::Base
   has_many :votes
 
   validates :title, presence: true
-  validates :name, presence: true
   validates :short_name, presence: true, format: {with: /\A[a-zA-Z0-9-]+\z/, message: "only allows letters, numbers and dashes" }
 
   has_attached_file :facebook_image
