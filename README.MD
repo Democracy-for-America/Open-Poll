@@ -65,4 +65,4 @@ Then, in the admin interface, set a poll's ActionKit page to the name of the Act
 
 License
 --------
-MIT
+This software is released under a GPLv3 license which requires that deployment of this application or derivitive works maintain a visible "Website Powered by Democracy for America" logo image in the footer of each page linking to our website.
