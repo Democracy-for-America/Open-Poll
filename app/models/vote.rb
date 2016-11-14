@@ -122,7 +122,7 @@ class Vote < ActiveRecord::Base
   end
 
   def twitter_link(domain, poll_slug)
-    "https://twitter.com/intent/tweet?url=#{ CGI.escape self.share_link(domain, poll_slug) }&text=#{ CGI.escape self.poll.twitter_text }"
+    "https://twitter.com/intent/tweet?url=#{ ERB::Util.url_encode self.share_link(domain, poll_slug) }&text=#{ ERB::Util.url_encode self.poll.twitter_text }"
   end
 
   def facebook_link(domain, poll_slug)

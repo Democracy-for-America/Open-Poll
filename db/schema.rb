@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217182419) do
+ActiveRecord::Schema.define(version: 20161114182522) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150217182419) do
     t.datetime "image_updated_at"
   end
 
+  add_index "candidates", ["name"], name: "index_candidates_on_name", using: :btree
   add_index "candidates", ["poll_id"], name: "index_candidates_on_poll_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -104,6 +105,9 @@ ActiveRecord::Schema.define(version: 20150217182419) do
     t.integer  "poll_id",           limit: 4
   end
 
+  add_index "votes", ["first_choice"], name: "index_votes_on_first_choice", using: :btree
   add_index "votes", ["poll_id"], name: "index_votes_on_poll_id", using: :btree
+  add_index "votes", ["second_choice"], name: "index_votes_on_second_choice", using: :btree
+  add_index "votes", ["third_choice"], name: "index_votes_on_third_choice", using: :btree
 
 end
