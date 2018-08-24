@@ -148,7 +148,7 @@ $(".drag")
       $('#drop-div-toggle').hide();
     }
     if ( $('.drop .drag').length >= 1 ) {
-      $('#red-ribbon h3').html('<a id="clickButton" href="#" onclick="selectPicks(); return false;">SAVE YOUR PICKS</a>');
+      $('#red-ribbon h3').html('<a id="clickButton" href="#" onclick="selectPicks(); return false;">CAST YOUR VOTE</a>');
       $('#red-ribbon h3').fadeIn();
     } else {
       $('#red-ribbon h3').fadeOut();
