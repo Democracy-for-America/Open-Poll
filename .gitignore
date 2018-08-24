@@ -21,3 +21,8 @@
 
 # Ignore application configuration
 /config/application.yml
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
