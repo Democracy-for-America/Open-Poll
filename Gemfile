@@ -51,7 +51,7 @@ end
 # Project specific gems:
 gem 'simple_form'
 gem 'paperclip'
-gem 'aws-sdk', '< 2.0'
+gem 'aws-sdk-s3'
 gem 'rails_12factor'
 gem 'delayed_job_active_record'
 gem 'httparty'
