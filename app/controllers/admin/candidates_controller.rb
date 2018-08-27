@@ -71,6 +71,6 @@ class Admin::CandidatesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def candidate_params
-      params.require(:candidate).permit(:name, :office, :image, :show_on_ballot, :show_in_results)
+      params.require(:candidate).permit(:name, :office, :image, :description, :show_on_ballot, :show_in_results)
     end
 end

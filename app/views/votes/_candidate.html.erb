@@ -2,4 +2,9 @@
   <%= image_tag c.image(:thumb) %>
   <span class="office"><%= c.office %></span>
   <span class="candidate"><%= c.name %></span>
+  <% if c.description.present? %>
+    <%= link_to "#{ params[:poll] }/candidate/#{ c.to_param }", class: 'candidate-info' do %>
+      <span class="circle">i</span>
+    <% end %>
+  <% end %>
 </div>

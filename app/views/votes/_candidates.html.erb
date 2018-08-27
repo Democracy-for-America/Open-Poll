@@ -13,7 +13,7 @@
   <% end %>
   <% @vote.candidates.each_with_index do |c| %>
     <% unless @vote.find_candidate_by_name(c.name).ranking || c.name == params['i_voted_for'] %>
-      <div id="drag-wrap<%= c.id %>" class="drag-wrap">
+      <div id="drag-wrap<%= c.id %>" class="drag-wrap" style="position: relative;">
         <%= render 'candidate', c: c %>
       </div>
     <% end %>

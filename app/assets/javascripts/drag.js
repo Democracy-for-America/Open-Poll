@@ -53,10 +53,11 @@ $(".drag")
   var vertical = touches[0].pageY;
   var horizontal = touches[0].pageX;
   target = $(touches[0].target).closest('.drag:not(.frozen)');
-  is_not_input = !$(touches[0].target).is('input');
+  is_not_input = !$(touches[0].target).is('input') && !$(touches[0].target).is('.circle');
   if ( is_not_input ) {
     $('input').blur(); // remove focus from input element, when initiating drag
     ev.gesture.preventDefault();
+    target.addClass('floating');
     target.css({
       position: "fixed",
       left: horizontal-50,
@@ -97,6 +98,7 @@ $(".drag")
       var vertical_offset = $(window).scrollTop();
     }
     ev.gesture.preventDefault();
+    target.removeClass('floating');
     target.css({
       boxShadow: "none",
       top: vertical + vertical_offset,

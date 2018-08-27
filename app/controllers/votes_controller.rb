@@ -33,12 +33,6 @@ class VotesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_poll
-      @poll = params[:poll] ? Poll.find_by_short_name(params[:poll]) : Domain.find_by_domain(request.host).poll rescue nil
-      render(file: "#{Rails.root}/public/404", layout: false, status: '404') if @poll.nil?
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def vote_params
       params.require(:vote).permit(:email, :name, :zip, :first_choice, :second_choice, :third_choice, :source, :full_querystring, :referring_vote_id, :referring_akid)

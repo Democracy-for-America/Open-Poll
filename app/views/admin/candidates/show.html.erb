@@ -11,6 +11,16 @@
 </p>
 
 <p>
+  <strong>Image:</strong><br>
+  <%= image_tag @candidate.image(:thumb) %>
+</p>
+
+<p>
+  <strong>Description:</strong><br>
+  <%= simple_format @candidate.description %>
+</p>
+
+<p>
   <strong>Show on ballot:</strong>
   <%= @candidate.show_on_ballot %>
 </p>
@@ -18,11 +28,6 @@
 <p>
   <strong>Show in results:</strong>
   <%= @candidate.show_in_results %>
-</p>
-
-<p>
-  <strong>Image:</strong><br>
-  <%= image_tag @candidate.image(:thumb) %>
 </p>
 
 <%= link_to 'Edit', edit_admin_poll_candidate_path(:poll, @candidate) %> |

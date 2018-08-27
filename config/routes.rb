@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get ':poll' => 'votes#new'
   post ':poll' => 'votes#create'
   get ':poll/results' => 'results#show'
+  get ':poll/candidate/:candidate_id' => 'candidates#show'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

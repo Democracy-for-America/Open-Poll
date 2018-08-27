@@ -107,7 +107,7 @@ input.write-in[type="text"] {
 .drop2::after { content: "2"; }
 .drop3::after { content: "3"; }
 
-.drop .office, .drop .write-candidate, .drop input.write-in[type="text"] {
+.drop .office, .drop .write-candidate, .drop input.write-in[type="text"], .drop .candidate-info, .floating .candidate-info {
     display: none;
 }
 
@@ -268,3 +268,36 @@ input.write-in[type="text"] {
 
 .drop1 { margin-left: 0px; }
 .drop3 { margin-right: 0px; }
+
+.candidate-info {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  display: inline-block;
+  background-color: #A00;
+  color: #A00;
+  font-family: 'Times';
+  font-style: italic;
+  font-weight: bold;
+  margin: 0 auto;
+  width: 22px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 2px;
+}
+
+.candidate-info:hover {
+  background-color: #F00;
+  color: #F00;
+}
+
+.candidate-info .circle {
+  border-radius: 9px;
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: auto auto;
+  background-color: white;
+  font-size: 17px;
+  line-height: 19px;
+}
