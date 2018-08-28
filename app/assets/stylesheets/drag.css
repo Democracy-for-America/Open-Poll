@@ -211,12 +211,13 @@ input.write-in[type="text"] {
 }
 
 .btn-blue, .btn-blue:hover {
+  border: none;
   color: #FFF !important;
   background: #0058A0 !important;
 }
 
 .btn-white, .btn-white:hover {
-  font-size: 16px;
+  border: none;
   color: #F00;
   background: #FFF;
 }

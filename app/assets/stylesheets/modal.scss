@@ -10,10 +10,11 @@
   background-color: #FFF;
 }
 
-#modalContent > img {
+#modalContent img {
   float: left;
   padding: 0px 12px 12px 0px;
-  height: 300px;
+  width: 200px;
+  max-width: 50%;
 }
 
 @media screen and (min-width: 800px) {
@@ -37,6 +38,7 @@
 }
 
 .videoWrapper {
+  display: block;
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
   padding-top: 25px;
