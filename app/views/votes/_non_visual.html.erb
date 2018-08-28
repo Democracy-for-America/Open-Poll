@@ -28,7 +28,7 @@
       <%= f.hidden_field :referring_akid, value: params[:akid] %>
       <%= f.hidden_field :referring_vote_id, as: :string, value: (@vote.referring_vote_id || (@parent ? @parent.id : nil)) %>
       <%= f.hidden_field :full_querystring, value: (@vote.full_querystring || request.query_string) %>
-      <button class="btn-lrg btn-blue" style="width: 75%;">SUBMIT</button>
+      <button class="button btn-blue" style="width: 75%;">SUBMIT</button>
     <% end %>
     </div>
   </div>

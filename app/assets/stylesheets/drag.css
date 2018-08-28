@@ -215,8 +215,8 @@ input.write-in[type="text"] {
 }
 
 .btn-blue, .btn-blue:hover {
-    color: #FFF;
-    background: #0058A0;
+    color: #FFF !important;
+    background: #0058A0 !important;
 }
 
 .btn-white, .btn-white:hover {
