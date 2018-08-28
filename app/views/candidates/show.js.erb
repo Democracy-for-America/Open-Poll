@@ -1,4 +1,5 @@
-$("#modalTitle").text("Vote for <%= j @candidate.name.to_s.html_safe %>");
+$("#modalVote").text("Vote for <%= j @candidate.name.to_s.html_safe %>");
+$("#modalVote").attr("onclick", "manualVote( $('#drag<%= @candidate.id %>') ); hideModal(); return false;");
 $("#modalOffice").text("<%= j @candidate.office.to_s.html_safe %>");
 $("#modalContent").html("<%= j embed_videos simple_format @candidate.description.to_s.html_safe %>");
 $("a.overlay").attr("href", '#').show();

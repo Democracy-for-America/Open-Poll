@@ -218,3 +218,36 @@ $(window).on('scroll resize', function() {
 $('.write-in').keyup(function() {
   $(this).prev(".write-name").html($(this).val());
 });
+
+// Manually vote for a candidate
+function manualVote(candidateDiv) {
+  // Find an empty destination
+  var emptyDestination = $(".drop1:empty, .drop2:empty, .drop3:empty").first()[0];
+
+  if (emptyDestination) {
+    // Append the candidate being voted for to the drop div.
+    emptyDestination.append(candidateDiv[0]);
+  } else {
+    console.log(candidateDiv[0]);
+    var candidateDropBox = candidateDiv.parent()[0];
+    var currentThirdPlace = $(".drop3").children(".drag");
+    var thirdPlace = $(".drop3").last()[0];
+
+    thirdPlace.append(candidateDiv[0]);
+    candidateDropBox.append(currentThirdPlace[0]);
+  }
+
+  // Toggle the "Cast your vote" button
+  if ( $('.drop .drag').length == 0 ) {
+    $('#drop-div h3').fadeIn('fast');
+    $('#drop-div-toggle').hide();
+  }
+  if ( $('.drop .drag').length >= 1 ) {
+    $('#drop-div-toggle').show();
+    $('#drop-div h3').hide();
+    $('#red-ribbon h3').html('<a id="clickButton" href="#" onclick="selectPicks(); return false;">CAST YOUR VOTE</a>');
+    $('#red-ribbon h3').fadeIn();
+  } else {
+    $('#red-ribbon h3').fadeOut();
+  }
+}

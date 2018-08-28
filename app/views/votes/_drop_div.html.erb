@@ -5,32 +5,32 @@
     <%= @poll.instructions.html_safe %>
   </h3>
   <div id="drop-div-toggle" style="display: <%= show_instructions ? 'none' : 'block' %>;">
-    <div class="drop drop1">
-      <% if c = @vote.first_choice_model %>
-        <%= render 'candidate', c: c %>
-      <% elsif @vote.first_choice != '' %>
-        <%= render 'write_in', name: @vote['first_choice'] %>
-      <% elsif params['i_voted_for'] %>
-        <% if c = @vote.find_candidate_by_name(params['i_voted_for']) %>
-          <%= render 'candidate', c: c %>
-        <% else %>
-          <%= render 'write_in', name: params['i_voted_for'] %>
-        <% end %>
-      <% end %>
-    </div>
-    <div class="drop drop2">
-      <% if c = @vote.second_choice_model %>
-        <%= render 'candidate', c: c %>
-      <% elsif @vote.second_choice != '' %>
-        <%= render 'write_in', name: @vote['second_choice'] %>
-      <% end %>
-    </div>
-    <div class="drop drop3">
-      <% if c = @vote.third_choice_model %>
-        <%= render 'candidate', c: c %>
-      <% elsif @vote.third_choice != '' %>
-        <%= render 'write_in', name: @vote['third_choice'] %>
-      <% end %>
-    </div>
+    <div class="drop drop1"><!--
+      --><% if c = @vote.first_choice_model %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @vote.first_choice != '' %><!--
+        --><%= render 'write_in', name: @vote['first_choice'] %><!--
+      --><% elsif params['i_voted_for'] %><!--
+        --><% if c = @vote.find_candidate_by_name(params['i_voted_for']) %><!--
+          --><%= render 'candidate', c: c %><!--
+        --><% else %><!--
+          --><%= render 'write_in', name: params['i_voted_for'] %><!--
+        --><% end %><!--
+      --><% end %><!--
+    --></div>
+    <div class="drop drop2"><!--
+      --><% if c = @vote.second_choice_model %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @vote.second_choice != '' %><!--
+        --><%= render 'write_in', name: @vote['second_choice'] %><!--
+      --><% end %><!--
+    --></div>
+    <div class="drop drop3"><!--
+      --><% if c = @vote.third_choice_model %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @vote.third_choice != '' %><!--
+        --><%= render 'write_in', name: @vote['third_choice'] %><!--
+      --><% end %><!--
+    --></div>
   </div>
 </div>
