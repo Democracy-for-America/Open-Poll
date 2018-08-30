@@ -267,7 +267,7 @@ input.write-in[type="text"] {
 .drop1 { margin-left: 0px; }
 .drop3 { margin-right: 0px; }
 
-.candidate-info {
+.candidate-info, .candidate-info:visited {
   position: absolute;
   right: -4px;
   top: -4px;
