@@ -5,7 +5,8 @@ class Candidate < ActiveRecord::Base
 
   scope :visible, -> { where(show_on_ballot: true) }
 
-  has_attached_file :image, styles: { medium: "300x300#", thumb: "100x100#" }, default_url: "unnamed.png"
+  has_attached_file :image, styles: { medium: "300x300#", thumb: "100x100#" }, default_url: "unnamed.png",
+    path: "open-poll/:class/:attachment/:id_partition/:style/:filename"
   validates_attachment :image, content_type: { content_type: /\Aimage\/.*\Z/ }
 
   def to_param
