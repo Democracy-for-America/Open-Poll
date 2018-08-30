@@ -1,6 +1,6 @@
 <% show_instructions = @vote.errors.empty? && !params['i_voted_for'] && !params['hash'] && params['action'] != 'show' ? true : false %>
 
-<div id="drop-div" class="white ribbon" style="height: 156px; overflow: hidden; text-align: center;">
+<div id="drop-div" class="white ribbon no-select" style="height: 156px; overflow: hidden; text-align: center;">
   <h3 style="display: <%= show_instructions ? 'block' : 'none' %>; margin: auto; color: #ccc; width: %100%; max-width: 600px; height: 156px;">
     <%= @poll.instructions.html_safe %>
   </h3>
