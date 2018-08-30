@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post '' => 'votes#create'
 
   get ':poll/votes/:random_hash' => 'votes#show'
+  get ':poll/share/:r' => 'votes#new'
   get ':poll' => 'votes#new'
   post ':poll' => 'votes#create'
   get ':poll/results' => 'results#show'
