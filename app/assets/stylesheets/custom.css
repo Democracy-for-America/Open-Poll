@@ -77,6 +77,7 @@ RESPONSIVE HEADER QUERIES */
     .header #header-inner { text-align: justify; max-width: 700px; margin: auto; }
     .header #logo { height: 57px; display: inline-block; margin: 26px 0 0 0; position: relative; }
     .header #main-title { font-size: 30px; font-weight: bold; }
+    .header #sub-title { font-size: 22px;}
 }
 @media only screen and (min-width: 481px) and (max-width: 700px) {
     body { padding-top: 300px; }
