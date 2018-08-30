@@ -117,8 +117,8 @@ class Vote < ActiveRecord::Base
   # and other assorted snippets for use in after-action email
   def share_link(domain, poll_slug)
     poll_slug ?
-    "#{domain}/#{poll_slug}/?r=#{self.random_hash}" :
-    "#{domain}/?r=#{self.random_hash}"
+    "#{domain}/#{poll_slug}/share/#{self.random_hash}" :
+    "#{domain}/share/#{self.random_hash}"
   end
 
   def twitter_link(domain, poll_slug)
