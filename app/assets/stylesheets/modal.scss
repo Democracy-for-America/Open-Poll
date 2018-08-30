@@ -12,9 +12,20 @@
 
 #modalContent img {
   float: left;
-  padding: 0px 12px 12px 0px;
-  width: 200px;
-  max-width: 50%;
+  margin: 0px 12px 8px 0px;
+  width: 120px;
+  max-width: 33%;
+  border-radius: 12px;
+}
+
+#modalVote {
+  letter-spacing: 0px;
+  font-weight: bold;
+  padding: 0 12px;
+}
+
+#modalOffice {
+  font-weight: bold;
 }
 
 @media screen and (min-width: 800px) {
@@ -43,6 +54,7 @@
   padding-bottom: 56.25%; /* 16:9 */
   padding-top: 25px;
   height: 0;
+  margin-top: 12px;
 }
 .videoWrapper iframe {
   position: absolute;
