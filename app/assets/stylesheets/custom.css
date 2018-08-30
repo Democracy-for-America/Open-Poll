@@ -42,6 +42,15 @@ strong {
     color: inherit;
 }
 
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
 /*
 HEADER */
 .header { color: #fff; top: 0px; height: 110px; }
@@ -77,6 +86,7 @@ RESPONSIVE HEADER QUERIES */
     .header #header-inner { text-align: justify; max-width: 700px; margin: auto; }
     .header #logo { height: 57px; display: inline-block; margin: 26px 0 0 0; position: relative; }
     .header #main-title { font-size: 30px; font-weight: bold; }
+    .header #sub-title { font-size: 22px;}
 }
 @media only screen and (min-width: 481px) and (max-width: 700px) {
     body { padding-top: 300px; }
