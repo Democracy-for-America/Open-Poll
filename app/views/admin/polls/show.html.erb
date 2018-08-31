@@ -34,8 +34,9 @@
 
 <p>
   <strong>Email template:</strong><br>
-  <%= @poll.email_template %>
 </p>
+
+<div style="padding: 12px; border: 1px solid #999;"><%= @poll.email_template.html_safe %></div>
 
 <p>
   <strong>Results text:</strong><br>

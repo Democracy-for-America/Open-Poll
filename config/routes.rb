@@ -12,10 +12,13 @@ Rails.application.routes.draw do
   # Use the root of the site search for a poll based on sub-domain
   get 'votes/:random_hash' => 'votes#show'
   get '' => 'votes#new'
+  get 'share' => 'votes#new'
+  get 'share/:r' => 'votes#new'
   get 'results' => 'results#show'
   post '' => 'votes#create'
 
   get ':poll/votes/:random_hash' => 'votes#show'
+  get ':poll/share' => 'votes#new'
   get ':poll/share/:r' => 'votes#new'
   get ':poll' => 'votes#new'
   post ':poll' => 'votes#create'

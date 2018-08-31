@@ -12,6 +12,7 @@ class VotesController < ApplicationController
       @vote = params['hash'] ? (Vote.find_by_random_hash(params['hash']) || Vote.new) : Vote.new({poll_id: @poll.id})
       params['i_voted_for'] = params['s']
       if @parent = @vote.parent(params['r'])
+        @og_url = "#{ @domain }#{ request.fullpath.split('/share/')[0] }/share"
         params['i_voted_for'] = @parent.top_choice
       end
     end
