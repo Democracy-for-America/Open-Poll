@@ -3,7 +3,7 @@
   <span class="office"><%= c.office %></span>
   <span class="candidate"><%= c.name %></span>
   <% if c.description.present? %>
-    <%= link_to "/#{ params[:poll] }/candidate/#{ c.to_param }", class: 'candidate-info', remote: true do %>
+    <%= link_to "#{ @poll.short_name }/candidate/#{ c.to_param }", class: 'candidate-info', remote: true do %>
       <span class="circle">i</span>
     <% end %>
   <% end %>

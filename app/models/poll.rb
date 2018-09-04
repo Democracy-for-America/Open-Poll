@@ -35,14 +35,11 @@ class Poll < ActiveRecord::Base
 <strong>Or copy and paste this link to your top pick into an email:<br>
 {{ share_url }}</strong>
 </p>
-<p>
-<strong>If you want to change your vote at any time, use this link:<br>{{ change_url }}</strong>
-</p>
 <p>DFA’s [POLL NAME] will end on <strong>[DATE], at [TIME]</strong>. We will announce the results later that week. </p>
 <p>
-<strong><a href=\'https://secure.actblue.com/contribute/page/democracyforamericacontribute\'>Please chip in $3 to help Democracy for America\'s work to amplify your voice in the [UPCOMING PRIMARY ELECTION].</a></strong>
+<strong><a href=\'https://secure.actblue.com/contribute/page/democracyforamericacontribute\'>Please chip in $3 to help Democracy for America\'s work to amplify your voice in the [UPCOMING ELECTION].</a></strong>
 </p>
-<p>Thanks so much. Together, we will work to make sure the strongest possible candidate wins the [UPCOMING PRIMARY ELECTION] -- and goes on to win the [OFFICE].</p>
+<p>Thanks so much. Together, we will work to make sure the strongest possible candidate wins the [UPCOMING ELECTION] -- and goes on to win the [OFFICE].</p>
 <p>- Jay</p>
 <p>Jay Henderson, Campaign Manager <br>
 Democracy for America</p>'
