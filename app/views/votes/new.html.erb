@@ -1,6 +1,6 @@
 <% unless params[:drag] == 'false' %>
   <!-- Drag and drop form -->
-  <% if @vote.errors.any? || params['candidate_slug'] || params['r'] || params['hash'] %>
+  <% if @vote.errors.any? || params['candidate_slug'] || params['r'] %>
     <%= render 'drop_div' %>
     <div id="red-ribbon" class="red-gradient ribbon" style="height: 36px; box-shadow: 0px 5px 10px #999;">
       <h3 style="display: none;"></h3>
