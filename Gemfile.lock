@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/Democracy-for-America/ak_syncable.git
-  revision: 2482e116fadd97f921eb3b2d947049abfca5ef92
-  specs:
-    ak_syncable (0.0.3)
-      httparty
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -106,6 +99,7 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.6)
     libv8 (3.16.14.19)
+    liquid (4.0.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -223,7 +217,6 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
-  ak_syncable!
   aws-sdk-s3
   byebug
   coffee-rails (~> 4.1.0)
@@ -234,6 +227,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.0)
   jquery-rails
+  liquid
   mysql2 (~> 0.4.10)
   paperclip
   rails (= 4.2.10)

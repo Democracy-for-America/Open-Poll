@@ -1,10 +1,6 @@
 class Vote < ActiveRecord::Base
   belongs_to :poll
 
-  include AkSyncable
-  syncs_to -> { self.poll.actionkit_page }
-  @@synced_attributes = [:name, :email, :zip, :first_choice, :second_choice, :third_choice, :vote_id, :referring_vote_id, :referring_akid, :source]
-
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   VALID_ZIP_REGEX = /\A\d{5}(-\d{4})?\z/
   VALID_NAME_REGEX = /\S+\s+\S+/
@@ -27,12 +23,26 @@ class Vote < ActiveRecord::Base
   before_save :set_random_hash
   after_save :build_actionkit_sync_job
 
-  # Sync to ActionKit if ActionKit API connection is configured
   def build_actionkit_sync_job
-    ActionkitSyncJob.perform_later(self) if ENV['ACTIONKIT_PATH'] &&
-                                            ENV['ACTIONKIT_USERNAME'] &&
-                                            ENV['ACTIONKIT_PASSWORD'] &&
-                                            !self.poll.actionkit_page.blank?
+    ActionkitSyncJob.perform_later(self) unless self.poll.actionkit_page.blank?
+  end
+
+  # Sync to ActionKit if ActionKit API connection is configured
+  def sync_to_actionkit
+    body = {
+      page: self.poll.actionkit_page,
+      name: self.name,
+      email: self.email,
+      zip: self.zip,
+      action_first_choice: self.first_choice,
+      action_second_choice: self.second_choice,
+      action_third_choice: self.third_choice,
+      action_vote_id: self.vote_id,
+      action_referring_vote_id: self.vote_id,
+      referring_akid: self.referring_akid,
+      source: self.source
+    }
+    HTTParty.get("https://#{ ENV['ACTIONKIT_DOMAIN'] }/act?#{ body.to_query }") unless self.poll.actionkit_page.blank?
   end
 
   def downcase_email
@@ -95,8 +105,12 @@ class Vote < ActiveRecord::Base
     self.candidates.select{ |c| c.ranking == 'third' }[0]
   end
 
-  def find_candidate_by_name(name)
-    self.candidates.select{ |c| c.name == name }[0]
+  def find_candidate_by_name(n)
+    self.candidates.select{ |c| c.name == n }[0]
+  end
+
+  def find_candidate_by_slug(s)
+    self.candidates.select{ |c| c.slug == s }[0]
   end
 
   def unranked_candidates
@@ -117,8 +131,8 @@ class Vote < ActiveRecord::Base
   # and other assorted snippets for use in after-action email
   def share_link(domain, poll_slug)
     poll_slug ?
-    "#{domain}/#{poll_slug}/share/#{self.random_hash}" :
-    "#{domain}/share/#{self.random_hash}"
+    "#{domain}/#{poll_slug}/s/#{self.random_hash}" :
+    "#{domain}/s/#{self.random_hash}"
   end
 
   def twitter_link(domain, poll_slug)
@@ -152,17 +166,17 @@ class Vote < ActiveRecord::Base
 
   # Allow for a set of white-listed instance methods to be accessed in the context of the after-action email, via {{ snippet }} tags.
   def thank_you_email(domain, poll_slug)
-    self
-      .poll
-      .email_template
-      .gsub(/\{\{\s*first_name\s*\}\}/, self.name.split.first)
-      .gsub(/\{\{\s*share_url\s*\}\}/, self.share_link(domain, poll_slug))
-      .gsub(/\{\{\s*twitter_url\s*\}\}/, self.twitter_link(domain, poll_slug))
-      .gsub(/\{\{\s*facebook_url\s*\}\}/, self.facebook_link(domain, poll_slug))
-      .gsub(/\{\{\s*change_url\s*\}\}/, self.change_link(domain, poll_slug))
-      .gsub(/\{\{\s*top_candidate\s*\}\}/, self.top_choice)
-      .gsub(/\{\{\s*rank\s*\}\}/, self.rank)
-      .gsub(/\{\{\s*keep_or_put\s*\}\}/, self.rank == '1st' ? 'keep' : 'put')
-      .gsub(/\{\{.*\}\}/, '')
+    liquid_binding = {
+      'first_name' => self.name.split.first,
+      'share_url' => self.share_link(domain, poll_slug),
+      'twitter_url' => self.twitter_link(domain, poll_slug),
+      'facebook_url' => self.facebook_link(domain, poll_slug),
+      'change_url' => self.change_link(domain, poll_slug),
+      'top_candidate' => self.top_choice,
+      'rank' => self.rank,
+      'keep_or_put' => self.rank == '1st' ? 'keep' : 'put'
+    }
+    template = Liquid::Template.parse self.poll.email_template
+    template.render liquid_binding
   end
 end

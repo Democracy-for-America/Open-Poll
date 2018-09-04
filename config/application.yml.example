@@ -1,9 +1,7 @@
 development:
   ADMIN_USER: 'admin'
   ADMIN_PASSWORD: 'password'
-  ACTIONKIT_PATH: 'https://roboticdogs.actionkit.com/rest/v1/'
-  ACTIONKIT_USERNAME: 'actionkit_username'
-  ACTIONKIT_PASSWORD: 'actionkit_password'
+  ACTIONKIT_DOMAIN: 'roboticdogs.actionkit.com'
 
 test:
   ADMIN_USER: 'admin'

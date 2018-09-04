@@ -69,12 +69,28 @@
       <%= image_tag @poll.facebook_image, style: "max-width: 600px;" %>
     </div>
     <div class="field">
-      <label>Voting page Facebook title</label><br>
+      <label>Default Facebook title</label><br>
       <%= f.text_field :vote_page_og_title %>
     </div>
     <div class="field">
-      <label>Voting page Facebook description</label><br>
+      <label>Default Facebook description</label><br>
       <%= f.text_field :vote_page_og_description %>
+    </div>
+    <div class="field">
+      <label>Share your vote Facebook title</label><br>
+      <%= f.text_field :share_vote_og_title %>
+    </div>
+    <div class="field">
+      <label>Share your vote Facebook description</label><br>
+      <%= f.text_field :share_vote_og_description %>
+    </div>
+    <div class="field">
+      <label>Promote a candidate Facebook title</label><br>
+      <%= f.text_field :promote_candidate_og_title %>
+    </div>
+    <div class="field">
+      <label>Promote a candidate Facebook description</label><br>
+      <%= f.text_field :promote_candidate_og_description %>
     </div>
     <div class="field">
       <label>Results page Facebook title</label><br>

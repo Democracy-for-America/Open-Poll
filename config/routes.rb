@@ -10,20 +10,16 @@ Rails.application.routes.draw do
   end
 
   # Use the root of the site search for a poll based on sub-domain
-  get 'votes/:random_hash' => 'votes#show'
-  get '' => 'votes#new'
-  get 'share' => 'votes#new'
-  get 'share/:r' => 'votes#new'
-  get 'results' => 'results#show'
-  post '' => 'votes#create'
-
-  get ':poll/votes/:random_hash' => 'votes#show'
-  get ':poll/share' => 'votes#new'
-  get ':poll/share/:r' => 'votes#new'
-  get ':poll' => 'votes#new'
-  post ':poll' => 'votes#create'
-  get ':poll/results' => 'results#show'
-  get ':poll/candidate/:candidate_id' => 'candidates#show'
+  ['', ':poll/'].each do |slug|
+    get "#{ slug }" => 'votes#new'
+    post "#{ slug }" => 'votes#create'
+    get "#{ slug }v/:random_hash" => 'votes#show'
+    get "#{ slug }s" => 'votes#new'
+    get "#{ slug }s/:random_hash" => 'votes#new'
+    get "#{ slug }vote/:candidate_slug" => 'votes#new'
+    get "#{ slug }candidate/:candidate_id" => 'candidates#show'
+    get "#{ slug }results" => 'results#show'
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
