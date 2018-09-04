@@ -5,10 +5,10 @@
     <div class="row">
       <div class="16 columns">
         <p>
-          <em>This is the non-visual version of our <%= @poll.name %>. To view the visual version of this site, please visit <%= link_to "#{@domain}/#{params[:poll]}", "#{@domain}/#{params[:poll]}/", class: "styled" %>.</em>
+          <em>This is the non-visual version of <%= @poll.name %>. To view the visual version of this site, please visit <%= link_to "#{@domain}/#{params[:poll]}", "#{@domain}/#{params[:poll]}/", class: "styled" %>.</em>
         </p>
         <p>
-          Democracy for America wants to know who you support in our <%= @poll.name %>. Some potential candidates are listed below. Write in any of their names on the following form, or choose your own write-in candidate!
+          Democracy for America wants to know who you support in <%= @poll.name %>. Some potential candidates are listed below. Write in any of their names on the following form, or choose your own write-in candidate!
         </p>
       </div>
     </div>

@@ -1,0 +1,22 @@
+<% if @parent || request.fullpath.split('/').last == 's' %>
+  <meta property="og:title" content="<%= @poll.share_vote_og_title %>">
+  <meta name="description" property="og:description" content="<%= @poll.share_vote_og_description %>">
+  <meta property="og:url" content='<%= "#{ @domain }#{ request.fullpath.split(/\/s(\/|$)/)[0] }/s" %>'>
+  <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
+<% elsif params['i_voted_for'] %>
+  <% liquid_binding = {'candidate' => params['i_voted_for'] } %>
+  <meta property="og:title" content="<%= Liquid::Template.parse(@poll.promote_candidate_og_title).render(liquid_binding) %>">
+  <meta name="description" property="og:description" content="<%= Liquid::Template.parse(@poll.promote_candidate_og_description).render(liquid_binding) %>">
+  <meta property="og:url" content='<%= @og_url || "#{ @domain }#{ request.fullpath }" %>'>
+  <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
+<% elsif params['controller'] == 'results' %>
+  <meta property="og:title" content="<%= @poll.results_page_og_title %>">
+  <meta name="description" property="og:description" content="<%= @poll.results_page_og_description %>">
+  <meta property="og:url" content='<%= "#{ @domain }#{ request.fullpath }" %>'>
+  <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
+<% else %>
+  <meta property="og:title" content="<%= @poll.vote_page_og_title %>">
+  <meta name="description" property="og:description" content="<%= @poll.vote_page_og_description %>">
+  <meta property="og:url" content='<%= @og_url || "#{ @domain }#{ request.fullpath }" %>'>
+  <meta property="og:image" content="<%= image_url @poll.facebook_image %>">
+<% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180827164541) do
+ActiveRecord::Schema.define(version: 20180904165721) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20180827164541) do
     t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
     t.text     "description",        limit: 65535
+    t.string   "slug",               limit: 255
   end
 
   add_index "candidates", ["name"], name: "index_candidates_on_name", using: :btree
@@ -57,33 +58,37 @@ ActiveRecord::Schema.define(version: 20180827164541) do
   add_index "domains", ["poll_id"], name: "index_domains_on_poll_id", using: :btree
 
   create_table "polls", force: :cascade do |t|
-    t.string   "title",                       limit: 255
-    t.string   "subtitle",                    limit: 255
-    t.string   "short_name",                  limit: 255
+    t.string   "title",                            limit: 255
+    t.string   "subtitle",                         limit: 255
+    t.string   "short_name",                       limit: 255
     t.boolean  "end_voting"
     t.boolean  "show_results"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.string   "instructions",                limit: 255
-    t.string   "name",                        limit: 255
-    t.text     "email_template",              limit: 65535
-    t.string   "facebook_image_file_name",    limit: 255
-    t.string   "facebook_image_content_type", limit: 255
-    t.integer  "facebook_image_file_size",    limit: 4
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.string   "instructions",                     limit: 255
+    t.string   "name",                             limit: 255
+    t.text     "email_template",                   limit: 65535
+    t.string   "facebook_image_file_name",         limit: 255
+    t.string   "facebook_image_content_type",      limit: 255
+    t.integer  "facebook_image_file_size",         limit: 4
     t.datetime "facebook_image_updated_at"
-    t.text     "results_text",                limit: 65535
-    t.text     "custom_css",                  limit: 65535
-    t.string   "logo_file_name",              limit: 255
-    t.string   "logo_content_type",           limit: 255
-    t.integer  "logo_file_size",              limit: 4
+    t.text     "results_text",                     limit: 65535
+    t.text     "custom_css",                       limit: 65535
+    t.string   "logo_file_name",                   limit: 255
+    t.string   "logo_content_type",                limit: 255
+    t.integer  "logo_file_size",                   limit: 4
     t.datetime "logo_updated_at"
-    t.string   "actionkit_page",              limit: 255
-    t.string   "donation_url",                limit: 255
-    t.string   "twitter_text",                limit: 255
-    t.string   "vote_page_og_title",          limit: 255
-    t.string   "results_page_og_title",       limit: 255
-    t.string   "vote_page_og_description",    limit: 300
-    t.string   "results_page_og_description", limit: 300
+    t.string   "actionkit_page",                   limit: 255
+    t.string   "donation_url",                     limit: 255
+    t.string   "twitter_text",                     limit: 255
+    t.string   "vote_page_og_title",               limit: 255
+    t.string   "results_page_og_title",            limit: 255
+    t.string   "vote_page_og_description",         limit: 300
+    t.string   "results_page_og_description",      limit: 300
+    t.string   "share_vote_og_title",              limit: 255
+    t.string   "share_vote_og_description",        limit: 300
+    t.string   "promote_candidate_og_title",       limit: 255
+    t.string   "promote_candidate_og_description", limit: 300
   end
 
   create_table "votes", force: :cascade do |t|

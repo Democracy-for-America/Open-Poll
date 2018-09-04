@@ -9,10 +9,10 @@ class VotesController < ApplicationController
     if @poll.end_voting
       render(:voting_has_ended)
     else
-      @vote = params['hash'] ? (Vote.find_by_random_hash(params['hash']) || Vote.new) : Vote.new({poll_id: @poll.id})
-      params['i_voted_for'] = params['s']
-      if @parent = @vote.parent(params['r'])
-        @og_url = "#{ @domain }#{ request.fullpath.split('/share/')[0] }/share"
+      @vote = Vote.new(poll_id: @poll.id)
+      if params['candidate_slug']
+        params['i_voted_for'] = @vote.find_candidate_by_slug(params['candidate_slug']).try(:name)
+      elsif params['random_hash'] && (@parent = Vote.find_by random_hash: params['random_hash'])
         params['i_voted_for'] = @parent.top_choice
       end
     end
@@ -26,7 +26,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if @vote.update(vote_params)
         VoteMailer.confirmation(@vote, @domain, params[:poll]).deliver_later
-        format.html { redirect_to params[:poll] ? "/#{params[:poll]}/votes/#{@vote.random_hash}" : "/votes/#{@vote.random_hash}" }
+        format.html { redirect_to params[:poll] ? "/#{params[:poll]}/v/#{@vote.random_hash}" : "/v/#{@vote.random_hash}" }
       else
         format.html { render action: 'new' }
       end
@@ -34,7 +34,6 @@ class VotesController < ApplicationController
   end
 
   private
-    # Never trust parameters from the scary internet, only allow the white list through.
     def vote_params
       params.require(:vote).permit(:email, :name, :zip, :first_choice, :second_choice, :third_choice, :source, :full_querystring, :referring_vote_id, :referring_akid)
     end
