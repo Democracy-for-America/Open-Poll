@@ -6,12 +6,10 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Subtitle</th>
-      <th>Name</th>
-      <th>Short name</th>
+      <th>Slug</th>
       <th>End voting</th>
       <th>Show results</th>
-      <th colspan="3"></th>
+      <th colspan="4"></th>
     </tr>
   </thead>
 
@@ -19,13 +17,12 @@
     <% @polls.each do |poll| %>
       <tr>
         <td><%= poll.title %></td>
-        <td><%= poll.subtitle %></td>
-        <td><%= poll.name %></td>
         <td><%= poll.short_name %></td>
         <td><%= poll.end_voting %></td>
         <td><%= poll.show_results %></td>
         <td><%= link_to 'Edit', edit_admin_poll_path(poll) %></td>
         <td><%= link_to 'Candidates', admin_poll_candidates_path(poll) %></td>
+        <td><%= link_to 'Preview&nbsp;results'.html_safe, admin_poll_results_path(poll) %></td>
         <td><%= link_to 'Delete', admin_poll_path(poll), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
