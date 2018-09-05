@@ -11,7 +11,7 @@ class VotesController < ApplicationController
     else
       @vote = Vote.new(poll_id: @poll.id)
       if params['candidate_slug']
-        params['i_voted_for'] = @vote.find_candidate_by_slug(params['candidate_slug']).try(:name)
+        params['i_voted_for'] = @vote.find_candidate_by_slug(params['candidate_slug']).try(:name) or raise ActionController::RoutingError.new('Not Found')
       elsif params['random_hash'] && (@parent = Vote.find_by random_hash: params['random_hash'])
         params['i_voted_for'] = @parent.top_choice
       end
