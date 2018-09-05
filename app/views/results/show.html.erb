@@ -92,7 +92,7 @@
   <% @initial_results = Rails.cache.fetch("results/initial/#{@poll.id}") { @poll.initial_results } %>
   <% @runoff_results = Rails.cache.fetch("results/runoff/#{@poll.id}") { @poll.runoff_results } %>
   <% @timestamp = Rails.cache.fetch("results/timestamp/#{@poll.id}") { Time.now } %>
-  <%= render 'cached_results' %>
+  <%= render 'results/cached_results' %>
   <% CacheRefreshJob.perform_later(@poll) %>
 <% end %>
 
