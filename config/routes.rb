@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :polls do
+      get :results
       resources :candidates
     end
     resources :domains

@@ -13,7 +13,7 @@
       --><% elsif c = @vote.try(:first_choice_model) %><!--
         --><%= render 'candidate', c: c %><!--
       --><% elsif @vote.try(:first_choice).present? %><!--
-        --><%= render 'write_in', name: @parent['first_choice'] %><!--
+        --><%= render 'write_in', name: @vote['first_choice'] %><!--
       --><% elsif params['candidate_slug'] %><!--
         --><% if c = @vote.find_candidate_by_slug(params['candidate_slug']) %><!--
           --><%= render 'candidate', c: c %><!--
@@ -22,7 +22,19 @@
         --><% end %><!--
       --><% end %><!--
     --></div>
-    <div class="drop drop2"></div>
-    <div class="drop drop3"></div>
+    <div class="drop drop2"><!--
+      --><% if c = @vote.try(:second_choice_model) %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @vote.try(:second_choice).present? %><!--
+        --><%= render 'write_in', name: @vote['second_choice'] %><!--
+      --><% end %><!--
+    --></div>
+    <div class="drop drop3"><!--
+      --><% if c = @vote.try(:third_choice_model) %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @vote.try(:third_choice).present? %><!--
+        --><%= render 'write_in', name: @vote['third_choice'] %><!--
+      --><% end %><!--
+    --></div>
   </div>
 </div>
