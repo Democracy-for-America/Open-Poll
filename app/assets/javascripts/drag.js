@@ -200,7 +200,7 @@ function saveWriteIn() {
 function cancelForm() {
   $('#candidates').show();
   $('#user-form').hide();
-  $('#red-ribbon h3').html('<a id="clickButton" href="#" onclick="selectPicks(); return false;">SAVE &amp; SHARE YOUR PICKS</a>');
+  $('#red-ribbon h3').html('<a id="clickButton" href="#" onclick="selectPicks(); return false;">CAST YOUR VOTE</a>');
   $('#red-ribbon h3').css('opacity','1.0');
   $('#red-ribbon h3').show();
   frozen = false;
