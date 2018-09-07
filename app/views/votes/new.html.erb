@@ -28,6 +28,10 @@
   <%= render 'non_visual' %>
 <% end %>
 
+<% if @poll.help_text.present? %>
+  <div><%= @poll.help_text %></div>
+<% end %>
+
 <% if params[:drag] == 'false' %>
 <% else %>
   <p style="text-align: center;"><a href="?drag=false" style="color: #049;">Having trouble using the site? <span style="border-bottom: dashed 1px #049;">Click here</span>.</a></p>
