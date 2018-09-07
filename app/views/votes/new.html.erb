@@ -29,7 +29,7 @@
 <% end %>
 
 <% if @poll.help_text.present? %>
-  <div><%= @poll.help_text.html_safe %></div>
+  <div id="help-text" <% if @vote.errors.any? %>style="display: none;"<% end %>><%= @poll.help_text.html_safe %></div>
 <% end %>
 
 <% if params[:drag] == 'false' %>

@@ -163,7 +163,7 @@ $(".drag")
 }});
 
 function selectPicks() {
-  $('#candidates').hide();
+  $('#candidates, #help-text').hide();
   $('#user-form').show();
   var first_choice = $('.drop1 .candidate').text();
   if (first_choice == '') {
@@ -198,7 +198,7 @@ function saveWriteIn() {
 }
 
 function cancelForm() {
-  $('#candidates').show();
+  $('#candidates, #help-text').show();
   $('#user-form').hide();
   $('#red-ribbon h3').html('<a id="clickButton" href="#" onclick="selectPicks(); return false;">CAST YOUR VOTE</a>');
   $('#red-ribbon h3').css('opacity','1.0');
