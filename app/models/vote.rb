@@ -29,20 +29,25 @@ class Vote < ActiveRecord::Base
 
   # Sync to ActionKit if ActionKit API connection is configured
   def sync_to_actionkit
-    body = {
-      page: self.poll.actionkit_page,
-      name: self.name,
-      email: self.email,
-      zip: self.zip,
-      action_first_choice: self.first_choice,
-      action_second_choice: self.second_choice,
-      action_third_choice: self.third_choice,
-      action_vote_id: self.vote_id,
-      action_referring_vote_id: self.vote_id,
-      referring_akid: self.referring_akid,
-      source: self.source
-    }
-    HTTParty.get("https://#{ ENV['ACTIONKIT_DOMAIN'] }/act?#{ body.to_query }") unless self.poll.actionkit_page.blank?
+    unless self.poll.actionkit_page.blank?
+      body = {
+        page: self.poll.actionkit_page,
+        name: self.name,
+        email: self.email,
+        zip: self.zip,
+        action_first_choice: self.first_choice,
+        action_second_choice: self.second_choice,
+        action_third_choice: self.third_choice,
+        action_vote_id: self.vote_id,
+        action_referring_vote_id: self.vote_id,
+        referring_akid: self.referring_akid,
+        source: self.source
+      }
+
+      result = HTTParty.get("https://#{ ENV['ACTIONKIT_DOMAIN'] }/act?#{ body.to_query }")
+      action_id = CGI::parse(result.request.last_uri.to_s.split('?')[1])['action_id'][0]
+      self.update_column(:actionkit_id, action_id) if action_id
+    end
   end
 
   def downcase_email
