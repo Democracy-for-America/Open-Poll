@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180904165721) do
+ActiveRecord::Schema.define(version: 20180907162633) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20180904165721) do
     t.string   "share_vote_og_description",        limit: 300
     t.string   "promote_candidate_og_title",       limit: 255
     t.string   "promote_candidate_og_description", limit: 300
+    t.text     "help_text",                        limit: 65535
   end
 
   create_table "votes", force: :cascade do |t|

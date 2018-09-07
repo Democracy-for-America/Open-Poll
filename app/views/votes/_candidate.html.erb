@@ -1,7 +1,7 @@
 <div id="drag<%= c.id %>" class="drag">
   <%= image_tag c.image(:thumb) %>
-  <span class="office"><%= c.office %></span>
-  <span class="candidate"><%= c.name %></span>
+  <span class="office"><%= c.office.html_safe %></span>
+  <span class="candidate"><%= c.name.html_safe %></span>
   <% if c.description.present? %>
     <%= link_to "/#{ @poll.short_name }/candidate/#{ c.to_param }", class: 'candidate-info', remote: true do %>
       <span class="circle">i</span>
