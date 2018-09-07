@@ -32,7 +32,7 @@
       </div>
       <div class="twelve columns" style="float: left;">
         <% @poll.candidates.visible.each do |c| %>
-          <h5><%= c.name %>, <%= c.office %></h5>
+          <h5><%= c.name.html_safe %>, <%= c.office.html_safe %></h5>
           <%= embed_videos simple_format c.description.to_s.html_safe %>
         <% end %>
       </div>
