@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180907162633) do
+ActiveRecord::Schema.define(version: 20180912200657) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -110,6 +110,8 @@ ActiveRecord::Schema.define(version: 20180907162633) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "poll_id",           limit: 4
+    t.string   "phone",             limit: 255
+    t.boolean  "sms_opt_in"
   end
 
   add_index "votes", ["first_choice"], name: "index_votes_on_first_choice", using: :btree
