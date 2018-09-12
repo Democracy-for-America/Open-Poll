@@ -17,3 +17,4 @@
 //= require drag.js
 //= require modal.js
 //= require social.js
+//= require votes.js

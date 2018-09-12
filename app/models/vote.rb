@@ -12,12 +12,21 @@ class Vote < ActiveRecord::Base
   
   validates_length_of :name, maximum: 255
   validates_length_of :email, maximum: 255
+  validates_length_of :phone, maximum: 255
   validates_length_of :full_querystring, maximum: 255
   validates_length_of :source, maximum: 255
   validates_length_of :referring_vote_id, maximum: 255
   validates_length_of :first_choice, maximum: 255
   validates_length_of :second_choice, maximum: 255
   validates_length_of :third_choice, maximum: 255
+
+  validate :phone_length
+
+  def phone_length
+    unless self.phone.to_s.gsub(/\D/, '').length == 0 || self.phone.to_s.gsub(/\D/, '').length >= 10
+      self.errors.add(:phone, "Please enter a ten-digit number")
+    end
+  end
 
   before_validation :downcase_email
   before_save :set_random_hash
@@ -35,6 +44,9 @@ class Vote < ActiveRecord::Base
         name: self.name,
         email: self.email,
         zip: self.zip,
+        phone: self.phone,
+        action_sms_opt_in: self.sms_opt_in,
+        action_provided_mobile_phone: self.phone,
         action_first_choice: self.first_choice,
         action_second_choice: self.second_choice,
         action_third_choice: self.third_choice,
