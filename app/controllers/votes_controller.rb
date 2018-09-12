@@ -35,6 +35,6 @@ class VotesController < ApplicationController
 
   private
     def vote_params
-      params.require(:vote).permit(:email, :name, :zip, :first_choice, :second_choice, :third_choice, :source, :full_querystring, :referring_vote_id, :referring_akid)
+      params.require(:vote).permit(:name, :zip, :email, :phone, :sms_opt_in, :first_choice, :second_choice, :third_choice, :source, :full_querystring, :referring_vote_id, :referring_akid)
     end
 end
