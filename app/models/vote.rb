@@ -167,13 +167,7 @@ class Vote < ActiveRecord::Base
   end
 
   def top_choice
-    if self.first_choice == '' && self.second_choice == ''
-      return self['third_choice']
-    elsif self.first_choice == ''
-      return self['second_choice']
-    else
-      return self['first_choice']
-    end
+    [self.first_choice, self.second_choice, self.third_choice].reject(&:blank?).first
   end
 
   def rank

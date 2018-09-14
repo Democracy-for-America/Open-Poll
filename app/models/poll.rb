@@ -24,6 +24,7 @@ class Poll < ActiveRecord::Base
     @poll.vote_page_og_description = 'Find out who I voted for in Democracy for America\'s [POLL NAME], and submit your top picks!'
     @poll.vote_page_og_title = 'My top pick is...'
     @poll.twitter_text = 'Find out who I voted for in Democracy for America\'s [POLL NAME], and submit your top picks!'
+    @poll.from_line = '"DFA Pulse Poll Team" <info@democracyforamerica.com>'
     @poll.email_template =
 '<p id="notice">{{ first_name }} –</p>
 <p>Thank you for submitting your vote in Democracy for America\'s [POLL NAME]!</p>
@@ -40,9 +41,7 @@ class Poll < ActiveRecord::Base
 <strong><a href=\'https://secure.actblue.com/contribute/page/democracyforamericacontribute\'>Please chip in $3 to help Democracy for America\'s work to amplify your voice in the [UPCOMING ELECTION].</a></strong>
 </p>
 <p>Thanks so much. Together, we will work to make sure the strongest possible candidate wins the [UPCOMING ELECTION] -- and goes on to win the [OFFICE].</p>
-<p>- Jay</p>
-<p>Jay Henderson, Campaign Manager <br>
-Democracy for America</p>'
+<p>- The DFA Pulse Poll Team</p>'
     return @poll
   end
 
