@@ -61,6 +61,10 @@
       <label class="instructions">Enter the URL for a donation page to link to from the after-action page.</label>
     </div>
     <div class="field">
+      <%= f.label :from_line %><br>
+      <%= f.text_field :from_line %>
+    </div>
+    <div class="field">
       <%= f.label :thank_you_email_template %><br>
       <label class="instructions">You may use standard HTML tags to format your email. <a href="https://github.com/Democracy-for-America/Open-Poll#thank-you-email" target="_blank">(See available snippets)</a></label><br>
       <%= f.text_area :email_template %>
