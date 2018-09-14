@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180907162633) do
+ActiveRecord::Schema.define(version: 20180914194326) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -90,26 +90,31 @@ ActiveRecord::Schema.define(version: 20180907162633) do
     t.string   "promote_candidate_og_title",       limit: 255
     t.string   "promote_candidate_og_description", limit: 300
     t.text     "help_text",                        limit: 65535
+    t.string   "from_line",                        limit: 255
   end
 
   create_table "votes", force: :cascade do |t|
-    t.string   "email",             limit: 255
-    t.string   "name",              limit: 255
-    t.string   "zip",               limit: 255
-    t.string   "first_choice",      limit: 255
-    t.string   "second_choice",     limit: 255
-    t.string   "third_choice",      limit: 255
-    t.string   "source",            limit: 255
-    t.integer  "actionkit_id",      limit: 4
-    t.string   "random_hash",       limit: 255
-    t.string   "ip_address",        limit: 255
-    t.string   "session_cookie",    limit: 255
-    t.text     "full_querystring",  limit: 65535
-    t.integer  "referring_vote_id", limit: 4
-    t.string   "referring_akid",    limit: 255
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.integer  "poll_id",           limit: 4
+    t.string   "email",               limit: 255
+    t.string   "name",                limit: 255
+    t.string   "zip",                 limit: 255
+    t.string   "first_choice",        limit: 255
+    t.string   "second_choice",       limit: 255
+    t.string   "third_choice",        limit: 255
+    t.string   "source",              limit: 255
+    t.integer  "actionkit_id",        limit: 4
+    t.string   "random_hash",         limit: 255
+    t.string   "ip_address",          limit: 255
+    t.string   "session_cookie",      limit: 255
+    t.text     "full_querystring",    limit: 65535
+    t.integer  "referring_vote_id",   limit: 4
+    t.string   "referring_akid",      limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "poll_id",             limit: 4
+    t.string   "phone",               limit: 255
+    t.boolean  "sms_opt_in"
+    t.string   "auth_token",          limit: 255
+    t.boolean  "verified_auth_token"
   end
 
   add_index "votes", ["first_choice"], name: "index_votes_on_first_choice", using: :btree

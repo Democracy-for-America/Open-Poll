@@ -8,8 +8,9 @@ class VoteMailer < ActionMailer::Base
     @poll_slug = poll_slug
 
     mail(
+      from: @vote.poll.from_line,
       to: @vote.email,
-      subject: "Thanks for your vote"
+      subject: "Thanks! Now share your vote for #{ @vote.top_choice }"
     )
   end
 

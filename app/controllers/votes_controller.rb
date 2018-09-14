@@ -1,5 +1,6 @@
 class VotesController < ApplicationController
   before_action :set_poll, only: [:new, :create, :show]
+  skip_before_action :verify_authenticity_token
 
   def show
     @vote = Vote.find_by_random_hash(params[:random_hash])
@@ -23,6 +24,8 @@ class VotesController < ApplicationController
     @vote.poll_id = @poll.id
     @vote.ip_address = request.remote_ip
     @vote.session_cookie = session.id
+    @vote.auth_token = params['authenticity_token']
+    @vote.verified_auth_token = verified_request?
     respond_to do |format|
       if @vote.update(vote_params)
         VoteMailer.confirmation(@vote, @domain, params[:poll]).deliver_later
