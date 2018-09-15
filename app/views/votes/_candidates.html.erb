@@ -1,5 +1,5 @@
 <div id="candidates" class="add-bottom" style="display: <%= @vote.errors.empty? ? 'block' : 'none' %>; text-align: center; max-width: 900px; margin: auto;">
-  <% if @parent || params['s']  %>
+  <% if params['i_voted_for']  %>
     <div style="color: #555;">
       <% if @parent %>
         <h4>
@@ -7,7 +7,7 @@
         </h4>
       <% end %>
       <p>
-        Drag and drop your own top choices into the above area!
+        Drag and drop your <% if @parent %> own <% end %> top choices into the above area!
       </p>
     </div>
   <% end %>
