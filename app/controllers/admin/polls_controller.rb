@@ -1,7 +1,7 @@
 class Admin::PollsController < ApplicationController
   http_basic_authenticate_with name: ENV['ADMIN_USER'], password: ENV['ADMIN_PASSWORD']
   layout "admin"
-  before_action :set_poll, only: [:show, :edit, :update, :destroy, :results]
+  before_action :set_poll, only: [:show, :edit, :update, :destroy, :results, :raw_results]
 
   # GET /polls
   # GET /polls.json
@@ -65,6 +65,9 @@ class Admin::PollsController < ApplicationController
 
   def results
     render template: "results/show", layout: "application"
+  end
+
+  def raw_results
   end
 
   private

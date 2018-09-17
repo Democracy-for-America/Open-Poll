@@ -1,0 +1,35 @@
+<% cache "results/template/#{@poll.id}", expires_in: 10.minutes do %>
+  <% @total = Rails.cache.fetch("raw/total/#{@poll.id}") { @poll.votes.count } %>
+  <% @results = Rails.cache.fetch("raw/results/#{@poll.id}") { @poll.raw_results } %>
+  <% @timestamp = Rails.cache.fetch("raw/timestamp/#{@poll.id}") { Time.now } %>
+
+  <div style="width: 960px; margin: 0 auto; padding: 0;">
+  <p><strong>Total votes: <%= number_with_delimiter @total %></strong></p>
+
+  <table class="stupidTable">
+    <thead>
+      <th>Candidate</th>
+      <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">1st place votes &#8597;</th>
+      <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Any place votes &#8597;</th>
+    </thead>
+    <tbody>
+      <% other_1st = 0 ; other_all = 0 %>
+      <% @results.each do |row| %>
+        <% if row.candidate_id || row.votes >= 0.01 * @total %>
+          <tr>
+            <td><%= row.first_choice %><%= row.candidate_id ? '' : '*' %></td>
+            <td><%= number_with_delimiter row.votes %></td>
+            <td><%= number_with_delimiter row.all_votes %></td>
+          </tr>
+        <% else %>
+          <% other_1st += row.votes ; other_all += row.all_votes %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p><em>*Write-in candidate</em><br/><br/>Other write-ins: <%= number_with_delimiter other_1st %> first place votes, <%= number_with_delimiter other_all %> any place votes
+  </div>
+
+  <% CacheRawRefreshJob.perform_later(@poll) %>
+<% end %>

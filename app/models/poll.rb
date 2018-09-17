@@ -162,5 +162,25 @@ class Poll < ActiveRecord::Base
       ) AS full_results
       GROUP BY eliminated_candidate_1, eliminated_candidate_2
     ")
-  end  
+  end
+
+  # Intended for internal display
+  def raw_results
+    total = self.votes.count
+
+    Vote.find_by_sql("
+      SELECT
+        v.first_choice,
+        c.id AS candidate_id,
+        COUNT(DISTINCT v.id) AS votes,
+        (SELECT COUNT(DISTINCT w.id) FROM votes w WHERE v.poll_id = w.poll_id AND (v.first_choice = w.first_choice OR v.first_choice = w.second_choice OR v.first_choice = w.third_choice)) AS all_votes
+      FROM votes v
+      LEFT JOIN candidates c ON c.name = v.first_choice
+      WHERE
+        v.poll_id = #{self.id} AND
+        TRIM(v.first_choice <> '')
+      GROUP BY v.first_choice
+      ORDER BY votes DESC
+    ")
+  end
 end
