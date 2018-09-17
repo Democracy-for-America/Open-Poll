@@ -12,3 +12,4 @@
 //
 //= require jquery.min.js
 //= require jquery_ujs
+//= require stupid_table.js

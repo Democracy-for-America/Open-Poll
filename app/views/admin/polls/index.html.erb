@@ -16,12 +16,13 @@
   <tbody>
     <% @polls.each do |poll| %>
       <tr>
-        <td><%= poll.title %></td>
+        <td><%= link_to poll.title, admin_poll_path(poll) %></td>
         <td><%= poll.short_name %></td>
-        <td><%= poll.end_voting %></td>
-        <td><%= poll.show_results %></td>
+        <td><%= poll.end_voting ? "&#10004;".html_safe : '' %></td>
+        <td><%= poll.show_results ? "&#10004;".html_safe : '' %></td>
         <td><%= link_to 'Edit', edit_admin_poll_path(poll) %></td>
         <td><%= link_to 'Candidates', admin_poll_candidates_path(poll) %></td>
+        <td><%= link_to 'Raw&nbsp;results'.html_safe, admin_poll_raw_results_path(poll) %></td>
         <td><%= link_to 'Preview&nbsp;results'.html_safe, admin_poll_results_path(poll) %></td>
         <td><%= link_to 'Delete', admin_poll_path(poll), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
