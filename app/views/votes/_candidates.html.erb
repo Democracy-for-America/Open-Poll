@@ -18,6 +18,7 @@
       </div>
     <% end %>
   <% end %>
+    <% if false %>
     <div class="wrap-writein"><div id="drag-wrap-writein" class="drag-wrap drag-wrap-writein">
       <div id="drag201" class="drag writable" style="margin-bottom: 50px;">
           <%= image_tag 'unnamed.png' %>
@@ -38,6 +39,7 @@
           <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
       </div>
     </div></div>
+    <% end %>
   <% candidates_in_top_three = 0 %>
   <% candidates_in_top_three += (@vote.first_choice != '' || params['i_voted_for']) ? 1 : 0 %>
   <% candidates_in_top_three += (@vote.second_choice != '') ? 1 : 0 %>
