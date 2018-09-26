@@ -173,14 +173,25 @@ class Poll < ActiveRecord::Base
         v.first_choice,
         c.id AS candidate_id,
         COUNT(DISTINCT v.id) AS votes,
+        COUNT(DISTINCT v.ip_address) AS distinct_ip_addresses,
+        COUNT(DISTINCT v.session_cookie) AS distinct_session_cookies,
+        SUM(verified_auth_token <> 1) AS unverified_auth_tokens,
         (SELECT COUNT(DISTINCT w.id) FROM votes w WHERE v.poll_id = w.poll_id AND (v.first_choice = w.first_choice OR v.first_choice = w.second_choice OR v.first_choice = w.third_choice)) AS all_votes
       FROM votes v
-      LEFT JOIN candidates c ON c.name = v.first_choice
+      LEFT JOIN candidates c ON c.name = v.first_choice AND c.poll_id = v.poll_id
       WHERE
         v.poll_id = #{self.id} AND
         TRIM(v.first_choice <> '')
       GROUP BY v.first_choice
       ORDER BY votes DESC
     ")
+  end
+
+  def total_voters
+    self.votes.count
+  end
+
+  def total_votes
+    self.votes.map{ |v| [v.first_choice, v.second_choice, v.third_choice].reject(&:blank?).uniq.length }.sum
   end
 end

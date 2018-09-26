@@ -1,25 +1,36 @@
 <% cache "results/template/#{@poll.id}", expires_in: 10.minutes do %>
-  <% @total = Rails.cache.fetch("raw/total/#{@poll.id}") { @poll.votes.count } %>
+  <% @total_votes = Rails.cache.fetch("raw/total_votes/#{@poll.id}") { @poll.total_votes } %>
+  <% @total_voters = Rails.cache.fetch("raw/total_voters/#{@poll.id}") { @poll.total_voters } %>
   <% @results = Rails.cache.fetch("raw/results/#{@poll.id}") { @poll.raw_results } %>
   <% @timestamp = Rails.cache.fetch("raw/timestamp/#{@poll.id}") { Time.now } %>
 
-  <div style="width: 960px; margin: 0 auto; padding: 0;">
-  <p><strong>Total votes: <%= number_with_delimiter @total %></strong></p>
+  <div style="width: 1080px; margin: 0 auto; padding: 0;">
+  <p>Total distinct voters: <strong><%= number_with_delimiter @total_voters %></strong><br>Total 1st, 2nd & 3rd place votes: <strong><%= number_with_delimiter @total_votes %></strong></p>
 
   <table class="stupidTable">
     <thead>
       <th>Candidate</th>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">1st place votes &#8597;</th>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Any place votes &#8597;</th>
+      <% if params[:show_extra] %>
+      <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Distinct IP Addresses &#8597;</th>
+      <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Distinct Session Cookies &#8597;</th>
+      <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Unverified Auth Tokens &#8597;</th>
+      <% end %>
     </thead>
     <tbody>
       <% other_1st = 0 ; other_all = 0 %>
       <% @results.each do |row| %>
-        <% if row.candidate_id || row.votes >= 0.01 * @total %>
+        <% if row.candidate_id || row.votes >= 0.01 * @total_voters %>
           <tr>
             <td><%= row.first_choice %><%= row.candidate_id ? '' : '*' %></td>
             <td><%= number_with_delimiter row.votes %></td>
             <td><%= number_with_delimiter row.all_votes %></td>
+            <% if params[:show_extra] %>
+            <td><%= number_with_delimiter row.distinct_ip_addresses %></td>
+            <td><%= number_with_delimiter row.distinct_session_cookies %></td>
+            <td><%= number_with_delimiter row.unverified_auth_tokens %></td>
+            <% end %>
           </tr>
         <% else %>
           <% other_1st += row.votes ; other_all += row.all_votes %>
@@ -28,7 +39,9 @@
     </tbody>
   </table>
 
-  <p><em>*Write-in candidate</em><br/><br/>Other write-ins: <%= number_with_delimiter other_1st %> first place votes, <%= number_with_delimiter other_all %> any place votes
+  <p><em>*Write-in candidate</em><br/><br/>Other write-ins: <%= number_with_delimiter other_1st %> first place votes, <%= number_with_delimiter other_all %> any place votes</p>
+
+  <p><% if params[:show_extra] %><%= link_to "Show less", "/admin/polls/#{ @poll.id }/raw_results" %><% else %><%= link_to "Show additional stats", "/admin/polls/#{ @poll.id }/raw_results?show_extra=1" %><% end %></p>
   </div>
 
   <% CacheRawRefreshJob.perform_later(@poll) %>
