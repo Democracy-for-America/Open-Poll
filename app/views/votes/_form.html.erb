@@ -12,14 +12,22 @@
   <% end %>
 
   <div id="user-form" class="container" style="display: <%= @vote.errors.empty? ? 'none' : 'block' %>;">
-    <div class="sixteen columns">
-      <h4 style="text-align: center; font-weight:700;">Save your choices by submitting the form below.</h4>
-      <p style="text-align: center;">You'll be provided with a link to share your selections, and you can <br class="monitor">come back and update them at any time.</p>
+    <div class="row">
+      <div class="sixteen columns">
+        <h4 style="text-align: center;">Save your choices by submitting the form below.</h4>
+        <p style="text-align: center;">You'll be provided with a link to share your selections, and you can come back and update them at any time.</p>
+      </div>
     </div>
-    <div class="twelve columns offset-by-two add-bottom">
+
+    <div class="row centered-form add-bottom">
       <div class="four columns alpha">
         <div style="padding-right: 12px;">
           <%= f.input :name, label: "Name", input_html: {class: "contact-input remove-bottom"} %>
+        </div>
+      </div>
+      <div class="four columns">
+        <div style="padding-right: 12px;">
+          <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
         </div>
       </div>
       <div class="four columns">
@@ -29,22 +37,20 @@
       </div>
       <div class="four columns omega">
         <div style="padding-right: 12px;">
-          <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
+          <%= f.input :phone, as: :string, label: "Phone (Optional)", input_html: {class: "contact-input remove-bottom watch"}, wrapper_html: {style: "margin-bottom: 0px;"} %>
+          <div id="smsOptInWrapper">
+            <div id="smsOptInBox" style="display: none; max-width: 300px;">
+              <input type="hidden" name="vote[sms_opt_in]" value="0" /><label for="idSmsOptIn" style="display: block; font-weight: normal; font-size: 12px; line-height: 16px; text-transform: none; color: #333;"><input type="checkbox" id="idSmsOptIn" name="vote[sms_opt_in]" value="1" <% if @vote.sms_opt_in %>checked="checked"<% end %> /> Receive mobile alerts from Democracy for America. Msg &amp; data rates may apply. Text STOP to 33250 to stop receiving messages. Text HELP to 33250 for more information. <a href="http://democracyforamerica.com/site/page/privacy-policy" target="_blank" style="color: #777;">Terms &amp; conditions</a></label>
+            </div>
+          </div>
         </div>
       </div>
-      <br class="clear">
     </div>
-    <div class="eight columns offset-by-six">
-      <div class="four columns alpha" style="max-width: 50%;">
-        <div style="padding: 5px; text-align: center;">
-          <button class="btn-lrg btn-blue" style="width: 75%;">SUBMIT</button>
-        </div>
-      </div>
-      <div class="four columns omega" style="max-width: 50%;">
-        <div style="padding: 5px; text-align: right;">
-          <button class="btn-lrg btn-white" onclick="cancelForm(); return false;" style="width: 75%; text-align: right;">CANCEL</button>
-        </div>
-      </div>
+    <div class="row centered-form" style="margin-top: 30px; margin-bottom: 50px;">
+      <div class="eight columns offset-by-four form-controls"><!--
+     --><button class="btn-lrg btn-blue">SUBMIT</button><!--
+     --><button class="btn-lrg btn-white" onclick="cancelForm(); return false;">CANCEL</button><!--
+   --></div>
     </div>
   </div>
 

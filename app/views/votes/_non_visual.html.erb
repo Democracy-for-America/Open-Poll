@@ -16,12 +16,17 @@
     <div class="row">
       <div class="four columns" style="float: right;">
       <%= simple_form_for(@vote, url: "/#{params[:poll]}") do |f| %>
-        <%= f.input :name, label: "Name", input_html: {class: "contact-input remove-bottom"} %>
-        <%= f.input :email, label: "Email", input_html: {class: "contact-input remove-bottom"} %>
-        <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
         <%= f.input :first_choice, input_html: {class: "contact-input remove-bottom"} %>
         <%= f.input :second_choice, input_html: {class: "contact-input remove-bottom"} %>
         <%= f.input :third_choice, input_html: {class: "contact-input"} %>
+        <%= f.input :name, label: "Name", input_html: {class: "contact-input remove-bottom"} %>
+        <%= f.input :zip, label: "Zip", input_html: {class: "contact-input remove-bottom"} %>
+        <%= f.input :email, label: "Email", input_html: {class: "contact-input remove-bottom"} %>
+        <%= f.input :phone, as: :string, label: "Phone", input_html: {class: "contact-input remove-bottom"} %>
+        <div>
+          <input type="hidden" name="vote[sms_opt_in]" value="0" /><input type="checkbox" id="idSmsOptIn" name="vote[sms_opt_in]" value="1" <% if @vote.sms_opt_in %>checked="checked"<% end %> /><label for="idSmsOptIn" style="display: inline; font-weight: normal; font-size: 12px; text-transform: none; color: #333;">Receive mobile alerts from Democracy for America. Msg &amp; data rates may apply. Text STOP to 33250 to stop receiving messages. Text HELP to 33250 for more information. <a href="http://democracyforamerica.com/site/page/privacy-policy" target="_blank" style="color: #777;">Terms &amp; conditions</a></label>
+        </div>
+        <br>
         <input type="hidden" name="drag" value="false">
         <%= f.hidden_field :source, value: (@vote.source || params[:source]) %>
         <%= f.hidden_field :referring_akid, value: params[:akid] %>
