@@ -18,7 +18,7 @@
       <tr>
         <td><%= link_to poll.title, admin_poll_path(poll) %></td>
         <td><%= poll.short_name %></td>
-        <td><%= poll.end_voting ? "&#10004;".html_safe : '' %></td>
+        <td><%= poll.voting_ended? ? "&#10004;".html_safe : '' %></td>
         <td><%= poll.show_results ? "&#10004;".html_safe : '' %></td>
         <td><%= link_to 'Edit', edit_admin_poll_path(poll) %></td>
         <td><%= link_to 'Candidates', admin_poll_candidates_path(poll) %></td>

@@ -7,7 +7,7 @@ class VotesController < ApplicationController
   end
 
   def new
-    if @poll.end_voting
+    if @poll.voting_ended?
       render(:voting_has_ended)
     else
       @vote = Vote.new(poll_id: @poll.id)

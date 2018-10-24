@@ -194,4 +194,8 @@ class Poll < ActiveRecord::Base
   def total_votes
     self.votes.map{ |v| [v.first_choice, v.second_choice, v.third_choice].reject(&:blank?).uniq.length }.sum
   end
+
+  def voting_ended?
+    self.voting_ends_at.present? && self.voting_ends_at < Time.now
+  end
 end

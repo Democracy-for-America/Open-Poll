@@ -129,7 +129,8 @@
   <fieldset>
     <legend>Voting settings</legend>
     <div class="field">
-      <%= f.check_box :end_voting %><%= f.label :end_voting %>
+      <label>End voting at (UTC):</label><br>
+      <%= f.datetime_select :voting_ends_at, :ampm => true, :minute_step => 15 %>
     </div>
     <div class="field">
       <%= f.check_box :show_results %><%= f.label :show_results %>

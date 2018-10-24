@@ -3,7 +3,7 @@
 
 <div class="container">
   <h3 class="add-bottom"><%= @poll.results_text.html_safe %></h3>
-  <% unless @poll.end_voting %><p style="text-align: center;">Haven't voted yet? <a href="/<%= @poll.short_name %>" style="color: #049; border-bottom: dashed 1px #049;">Vote now!</a></p><% end %>
+  <% unless @poll.voting_ended? %><p style="text-align: center;">Haven't voted yet? <a href="/<%= @poll.short_name %>" style="color: #049; border-bottom: dashed 1px #049;">Vote now!</a></p><% end %>
   <ul id="active">
   <% @initial_results.each do |c| %>
     <li class="candidate_row" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>" onclick='addToEliminatedCandidates("<%= c.top_choice.upcase %>");'>
