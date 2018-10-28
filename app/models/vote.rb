@@ -5,7 +5,7 @@ class Vote < ActiveRecord::Base
   VALID_ZIP_REGEX = /\A\d{5}(-\d{4})?\z/
   VALID_NAME_REGEX = /\S+\s+\S+/
 
-  validates :email, uniqueness: { case_sensitive: false, scope: :poll_id }
+  # validates :email, uniqueness: { case_sensitive: false, scope: :poll_id }
   validates_format_of :email, {with: VALID_EMAIL_REGEX, message: "is invalid"}
   validates_format_of :name, {with: VALID_NAME_REGEX, message: "required"}
   validates_format_of :zip, {with: VALID_ZIP_REGEX, message: "is invalid"}
@@ -74,52 +74,52 @@ class Vote < ActiveRecord::Base
     self.id
   end
 
-  # Protect against SQL injection
-  # For Postgres use:
-  #   gsub(/[^a-zA-Z]/, '')
-  # instead of:
-  #   gsub('\'', '')
-  def first_choice
-    (self['first_choice'] || '').gsub('\'', '')
-  end
-  def second_choice
-    (self['second_choice'] || '').gsub('\'', '')
-  end
-  def third_choice
-    (self['third_choice'] || '').gsub('\'', '')
-  end
-
-  # For Postgres use:
-  #   CASE REGEXP_REPLACE(c.name, '[^a-zA-Z]', '', 'g')
-  # instead of:
-  #   REPLACE(c.name, '''', '')
   def candidates
-    Candidate.find_by_sql %Q[
-      SELECT
-        c.*,
-        CASE REPLACE(c.name, '''', '')
-        WHEN '#{self.first_choice}' THEN 'first'
-        WHEN '#{self.second_choice}' THEN 'second'
-        WHEN '#{self.third_choice}' THEN 'third'
-        ELSE NULL
-      END AS ranking
-      FROM candidates c
-      WHERE
-      c.poll_id = #{self.poll_id} AND
-      c.show_on_ballot = 1
-      ORDER BY REPLACE(c.name, '''', '') IN ('#{self.first_choice}', '#{self.second_choice}', '#{self.third_choice}') ASC
-    ]
+    if self.id
+      Candidate.find_by_sql %Q[
+        SELECT
+          c.*,
+          CASE c.name
+          WHEN v.first_choice THEN 'first'
+          WHEN v.second_choice THEN 'second'
+          WHEN v.third_choice THEN 'third'
+          ELSE NULL
+        END AS ranking
+        FROM candidates c, votes v
+        WHERE
+          v.id = #{ self.id } AND
+          c.poll_id = #{ self.poll_id } AND
+          c.show_on_ballot = 1
+        ORDER BY c.name IN (v.first_choice, v.second_choice, v.third_choice) ASC
+      ]
+    else
+      Candidate.find_by_sql %Q[
+        SELECT
+          c.*,
+          NULL AS ranking
+        FROM candidates c
+        WHERE
+          c.poll_id = #{ self.poll_id } AND
+          c.show_on_ballot = 1
+      ]
+    end
   end
 
   # Helper methods to pick the top three choices of each vote
   def first_choice_model
     self.candidates.select{ |c| c.ranking == 'first' }[0]
   end
+
   def second_choice_model
     self.candidates.select{ |c| c.ranking == 'second' }[0]
   end
+
   def third_choice_model
     self.candidates.select{ |c| c.ranking == 'third' }[0]
+  end
+
+  def top_choice_model
+    self.first_choice_model || self.second_choice_model || self.third_choice_model
   end
 
   def find_candidate_by_name(n)

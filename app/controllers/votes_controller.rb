@@ -20,14 +20,14 @@ class VotesController < ApplicationController
   end
 
   def create
-    @vote = Vote.where(poll_id: @poll.id).find_by_email(vote_params['email'].downcase) || Vote.new(vote_params)
+    @vote = Vote.new(vote_params)
     @vote.poll_id = @poll.id
     @vote.ip_address = request.remote_ip
     @vote.session_cookie = session.id
     @vote.auth_token = params['authenticity_token']
     @vote.verified_auth_token = verified_request?
     respond_to do |format|
-      if @vote.update(vote_params)
+      if @vote.save(vote_params)
         VoteMailer.confirmation(@vote, @domain, params[:poll]).deliver_later
         format.html { redirect_to params[:poll] ? "/#{params[:poll]}/v/#{@vote.random_hash}" : "/v/#{@vote.random_hash}" }
       else

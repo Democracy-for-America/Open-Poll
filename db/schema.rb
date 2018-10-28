@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181024153307) do
+ActiveRecord::Schema.define(version: 20181026174624) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20181024153307) do
     t.boolean  "verified_auth_token"
   end
 
+  add_index "votes", ["email"], name: "index_votes_on_email", using: :btree
   add_index "votes", ["first_choice"], name: "index_votes_on_first_choice", using: :btree
   add_index "votes", ["poll_id"], name: "index_votes_on_poll_id", using: :btree
   add_index "votes", ["second_choice"], name: "index_votes_on_second_choice", using: :btree

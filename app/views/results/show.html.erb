@@ -86,100 +86,114 @@
  </style>
 <![endif]-->  
 
-<%= 'Last refreshed: ' + (Rails.cache.read("results/timestamp/#{@poll.id}") || 'JUST NOW').to_s if params[:timestamp] %>
+<%= render('results/cached_results') %>
 
-<% cache "results/template/#{@poll.id}", expires_in: 10.minutes do %>
-  <% @initial_results = Rails.cache.fetch("results/initial/#{@poll.id}") { @poll.initial_results } %>
-  <% @runoff_results = Rails.cache.fetch("results/runoff/#{@poll.id}") { @poll.runoff_results } %>
-  <% @timestamp = Rails.cache.fetch("results/timestamp/#{@poll.id}") { Time.now } %>
-  <%= render 'results/cached_results' %>
-  <% CacheRefreshJob.perform_later(@poll) %>
-<% end %>
+<script>
+  window.eliminatedCandidates = [];
 
-eliminated_candidates = [];
+  function recalculate() {
+    var results = {};
+    var totalVotes = 0.0;
+    var max = 0.0
 
-function addToEliminatedCandidates(name) {
-  if ( $.inArray(name, eliminated_candidates) < 0 ) {
-    eliminated_candidates.push(name);
-    var target = 'li[data-name="' + name + '"]';
-    if (eliminated_candidates.length == 1) {
-      $('#removed').slideDown();
-    }
-    $(target).slideUp(function(){recalculate();});
-    var target = '.hider-btn[data-name="' + name + '"]';
-    $(target).slideDown();
-  }
-}
-
-function removeFromEliminatedCandidates(name) {
-  var index = $.inArray(name, eliminated_candidates) ;
-  if ( index > -1 ) {
-    eliminated_candidates.splice(index, 1);
-    var target = 'li[data-name="' + name + '"]';
-    if (eliminated_candidates.length == 0) {
-      $('#removed').slideUp();
-    }
-    recalculate();
-    $(target).slideDown();
-    var target = '.hider-btn[data-name="' + name + '"]';
-    $(target).slideUp();
-  }
-}
-
-function recalculate() {
-  var new_results = $.extend({}, initial_results);
-  for (i = 0; i < runoff_results.length; ++i) {
-    var all_elements_contained = true;
-    for (j = 0; j < runoff_results[i]['eliminated_candidates'].length; ++j) {
-      if ( $.inArray(runoff_results[i]['eliminated_candidates'][j], eliminated_candidates) < 0 ) {
-        all_elements_contained = false;
-      }
-    }
-    if (all_elements_contained == true) {
-      for (var j in runoff_results[i]['runners_up']) {
-        new_results[j] = new_results[j] + runoff_results[i]['runners_up'][j];
-      }
-    }
-  }
-  var total = 0;
-  var max = 0;
-  for (var j in new_results) {
-    if ( $.inArray(j, eliminated_candidates) < 0) {
-      if (!isNaN(new_results[j])) {total = total + new_results[j];}
-      if (new_results[j] > max) {max = new_results[j];}
-    }
-  }
-  for (var j in new_results) {
-    var target = '.bar[data-name="' + j + '"]';
-    $(target).data('votes', new_results[j]);
-    var target = 'li[data-name="' + j + '"]';
-    $(target).data('votes', new_results[j]);
-    var target = '.value[data-name="' + j + '"]';
-    // $(target).html(new_results[j].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' votes');
-    $(target).html( (100 * new_results[j] / total).toFixed(2) + '%' );
-  }
-
-  $('.bar').each(function() {
-      $(this).animate({width: (100 * $(this).data('votes') / max) + '%'}, 'slow');
-  });
-
-  $('.bar').promise().done(function() {
-    var ul = $("ul");
-    var li = ul.children("li");
-
-    li.detach().sort(function(a, b) {
-      console.log( $(b).data('name') );
-      if ( $(b).data('name') == 'OTHER' ) {
-        return -1;
-      } else if ( $(a).data('name') == 'OTHER' ) {
-        return 1;
+    for (var i = 0; i < runoffResults.length; i++) {
+      if ( eliminatedCandidates.indexOf(runoffResults[i].candidates[0]) > -1 ) {
+        // first choice eliminated
+        if ( eliminatedCandidates.indexOf(runoffResults[i].candidates[1]) > -1 ) {
+          // second choice eliminated
+          if ( eliminatedCandidates.indexOf(runoffResults[i].candidates[2]) > -1 ) {
+            // third choice eliminated
+          } else {
+            // third choice not eliminated
+            var c = runoffResults[i].candidates[2];
+            var v = runoffResults[i].votes;
+            results[c] = results[c] || 0.0;
+            results[c] += v;
+            if (results[c] > max) { max = results[c]; }
+            totalVotes += v;
+          }
+        } else {
+          // second choice not eliminated
+          var c = runoffResults[i].candidates[1];
+          var v = runoffResults[i].votes;
+          results[c] = results[c] || 0.0;
+          results[c] += v;
+          if (results[c] > max) { max = results[c]; }
+          totalVotes += v;
+        }
       } else {
-        return $(b).data('votes') - $(a).data('votes');
+        // first choice not eliminated
+        var c = runoffResults[i].candidates[0];
+        var v = runoffResults[i].votes;
+        results[c] = results[c] || 0.0;
+        results[c] += v;
+        if (results[c] > max) { max = results[c]; }
+        totalVotes += v;
       }
-    });
-    ul.append(li);
-  });
+    }
 
-  // console.log('most votes:' + max);
-}
+    console.log(totalVotes);
+
+    var candidates = Object.keys(results);
+
+    for (var i = 0; i < candidates.length; i++) {
+      $("span.value[data-name='" + candidates[i] + "']").text( (100 * results[candidates[i]] / totalVotes ).toFixed(2) + '%' );
+      $("li.candidate_row[data-name='" + candidates[i] + "']").data('votes', results[candidates[i]]);
+      $("div.bar[data-name='" + candidates[i] + "']").data('votes', results[candidates[i]]);
+    }
+
+    $('.bar').each(function() {
+        $(this).animate({width: (100 * $(this).data('votes') / max) + '%'}, 'slow');
+    });
+
+    $('.bar').promise().done(function() {
+      var ul = $("ul");
+      var li = ul.children("li");
+
+      li.detach().sort(function(a, b) {
+        if ( $(b).data('name') == 'OTHER' ) {
+          return -1;
+        } else if ( $(a).data('name') == 'OTHER' ) {
+          return 1;
+        } else {
+          return $(b).data('votes') > $(a).data('votes') ? 1 : -1;
+        }
+      });
+      ul.append(li);
+    });
+
+    return results;
+  }
+
+  function addToEliminatedCandidates(name) {
+    if ( $.inArray(name, eliminatedCandidates) < 0 ) {
+      eliminatedCandidates.push(name);
+      var target = 'li[data-name="' + name + '"]';
+      if (eliminatedCandidates.length == 1) {
+        $('#removed').slideDown();
+      }
+      $(target).slideUp(function(){recalculate();});
+      var target = '.hider-btn[data-name="' + name + '"]';
+      $(target).slideDown();
+    }
+  }
+
+  function removeFromEliminatedCandidates(name) {
+    var index = $.inArray(name, eliminatedCandidates) ;
+    if ( index > -1 ) {
+      eliminatedCandidates.splice(index, 1);
+      var target = 'li[data-name="' + name + '"]';
+      if (eliminatedCandidates.length == 0) {
+        $('#removed').slideUp();
+      }
+      recalculate();
+      $(target).slideDown();
+      var target = '.hider-btn[data-name="' + name + '"]';
+      $(target).slideUp();
+    }
+  }
+
+  $(document).ready(function() {
+    recalculate();
+  });
 </script>

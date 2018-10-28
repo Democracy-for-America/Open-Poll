@@ -6,7 +6,7 @@
   </h3>
   <div id="drop-div-toggle" style="display: <%= show_instructions ? 'none' : 'block' %>;">
     <div class="drop drop1"><!--
-      --><% if c = @parent.try(:first_choice_model) %><!--
+      --><% if c = @parent.try(:top_choice_model) %><!--
         --><%= render 'candidate', c: c %><!--
       --><% elsif @parent.try(:first_choice).present? %><!--
         --><%= render 'write_in', name: @parent['first_choice'] %><!--
