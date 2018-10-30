@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181026174624) do
+ActiveRecord::Schema.define(version: 20181030003735) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20181026174624) do
     t.boolean  "sms_opt_in"
     t.string   "auth_token",          limit: 255
     t.boolean  "verified_auth_token"
+    t.string   "candidate_slug",      limit: 255
   end
 
   add_index "votes", ["email"], name: "index_votes_on_email", using: :btree

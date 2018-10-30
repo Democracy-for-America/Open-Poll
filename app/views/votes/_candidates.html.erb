@@ -11,32 +11,35 @@
       </p>
     </div>
   <% end %>
+  <% blanks = [] %>
   <% @vote.candidates.shuffle.each_with_index do |c| %>
-    <% unless @vote.find_candidate_by_name(c.name).ranking || c.name == params['i_voted_for'] %>
+    <% unless c.name.in? [params['i_voted_for'], @vote.first_choice, @vote.second_choice, @vote.third_choice] %>
       <div id="drag-wrap<%= c.id %>" class="drag-wrap" style="position: relative;">
         <%= render 'candidate', c: c %>
       </div>
+    <% else %>
+      <% blanks << c.id %>
     <% end %>
   <% end %>
-    <div class="wrap-writein"><div id="drag-wrap-writein" class="drag-wrap drag-wrap-writein">
-      <div id="drag201" class="drag writable" style="margin-bottom: 50px;">
-          <%= image_tag 'unnamed.png' %>
-            <span class="write-candidate">YOUR WRITE-IN:</span>
-            <span class="write-name"></span>
-          <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
-      </div>
-      <div id="drag202" class="drag writable" style="margin-bottom: 50px;">
-          <%= image_tag 'unnamed.png' %>
+  <div class="wrap-writein"><div id="drag-wrap-writein" class="drag-wrap drag-wrap-writein">
+    <div id="drag201" class="drag writable" style="margin-bottom: 50px;">
+        <%= image_tag 'unnamed.png' %>
           <span class="write-candidate">YOUR WRITE-IN:</span>
           <span class="write-name"></span>
-          <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
-      </div>
-      <div id="drag203" class="drag writable" style="margin-bottom: 50px;">
-          <%= image_tag 'unnamed.png' %>
-          <span class="write-candidate">YOUR WRITE-IN:</span>
-          <span class="write-name"></span>
-          <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
-      </div>
-    </div></div>
-  <% if @parent %><div id="drag-wrap<%= 101 %>" class="drag-wrap"></div><% end %>
+        <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
+    </div>
+    <div id="drag202" class="drag writable" style="margin-bottom: 50px;">
+        <%= image_tag 'unnamed.png' %>
+        <span class="write-candidate">YOUR WRITE-IN:</span>
+        <span class="write-name"></span>
+        <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
+    </div>
+    <div id="drag203" class="drag writable" style="margin-bottom: 50px;">
+        <%= image_tag 'unnamed.png' %>
+        <span class="write-candidate">YOUR WRITE-IN:</span>
+        <span class="write-name"></span>
+        <input class="write-in" type="text" onchange="saveWriteIn();" maxlength="255" placeholder="NAME" />
+    </div>
+  </div></div>
+  <% for blank in blanks %><div id="drag-wrap<%= blank %>" class="drag-wrap" style="position: relative;"></div><% end %>
 </div>

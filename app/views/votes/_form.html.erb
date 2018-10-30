@@ -1,4 +1,4 @@
-<%= simple_form_for(@vote, url: "/#{params[:poll]}") do |f| %>
+<%= simple_form_for(@vote, url: request.path) do |f| %>
 
   <% if false && @vote.errors.any? %>
   <div id="error_explanation">
@@ -63,7 +63,7 @@
     <hr>
     <%= f.input :source, input_html: {value: (@vote.source || params[:source])} %>
     <%= f.input :referring_akid, input_html: {value: params[:akid]} %>
-    <%= f.input :referring_vote_id, as: :string, input_html: {value: (@vote.referring_vote_id || (@parent ? @parent.id : nil))} %>
+    <%= f.input :referring_vote_hash, as: :string, input_html: {value: params[:vote_hash]} %>
     <%= f.input :full_querystring, input_html: {value: (@vote.full_querystring || request.query_string)} %>
   </fieldset>
 <% end %>

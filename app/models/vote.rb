@@ -29,7 +29,6 @@ class Vote < ActiveRecord::Base
   end
 
   before_validation :downcase_email
-  before_save :set_random_hash
   after_save :build_actionkit_sync_job
 
   def build_actionkit_sync_job
@@ -75,81 +74,39 @@ class Vote < ActiveRecord::Base
   end
 
   def candidates
-    if self.id
-      Candidate.find_by_sql %Q[
-        SELECT
-          c.*,
-          CASE c.name
-          WHEN v.first_choice THEN 'first'
-          WHEN v.second_choice THEN 'second'
-          WHEN v.third_choice THEN 'third'
-          ELSE NULL
-        END AS ranking
-        FROM candidates c, votes v
-        WHERE
-          v.id = #{ self.id } AND
-          c.poll_id = #{ self.poll_id } AND
-          c.show_on_ballot = 1
-        ORDER BY c.name IN (v.first_choice, v.second_choice, v.third_choice) ASC
-      ]
-    else
-      Candidate.find_by_sql %Q[
-        SELECT
-          c.*,
-          NULL AS ranking
-        FROM candidates c
-        WHERE
-          c.poll_id = #{ self.poll_id } AND
-          c.show_on_ballot = 1
-      ]
-    end
+    Candidate.find_by_sql("
+      SELECT
+        c.*
+      FROM candidates c
+      WHERE
+        c.poll_id = #{ self.poll_id } AND
+        c.show_on_ballot = 1
+    ")
   end
 
   # Helper methods to pick the top three choices of each vote
   def first_choice_model
-    self.candidates.select{ |c| c.ranking == 'first' }[0]
+    self.candidates.select{ |c| c.name == self.first_choice }[0]
   end
 
   def second_choice_model
-    self.candidates.select{ |c| c.ranking == 'second' }[0]
+    self.candidates.select{ |c| c.name == self.second_choice }[0]
   end
 
   def third_choice_model
-    self.candidates.select{ |c| c.ranking == 'third' }[0]
-  end
-
-  def top_choice_model
-    self.first_choice_model || self.second_choice_model || self.third_choice_model
-  end
-
-  def find_candidate_by_name(n)
-    self.candidates.select{ |c| c.name == n }[0]
+    self.candidates.select{ |c| c.name == self.third_choice }[0]
   end
 
   def find_candidate_by_slug(s)
     self.candidates.select{ |c| c.slug == s }[0]
   end
 
-  def unranked_candidates
-    self.candidates.select{ |c| c.ranking.nil? }
-  end
-
-  # Create a random-looking string to ID votes for the purpose of referral tracking, etc.
-  # Use the current Unix timestamp to decrease the odds of a collision
-  def set_random_hash
-    self.random_hash ||= Time.now.to_i.to_s.reverse.split('').zip(SecureRandom.urlsafe_base64(12).split('')).flatten.compact.join
-  end
-
-  def parent(hash)
-    hash ? Vote.find_by_random_hash(hash) : nil
-  end
-
   # Various methods used for generating social media share URLs
   # and other assorted snippets for use in after-action email
   def share_link(domain, poll_slug)
     poll_slug ?
-    "#{domain}/#{poll_slug}/s/#{self.random_hash}" :
-    "#{domain}/s/#{self.random_hash}"
+    "#{domain}/#{poll_slug}/s/#{self.hash}" :
+    "#{domain}/s/#{self.hash}"
   end
 
   def twitter_link(domain, poll_slug)
@@ -162,8 +119,8 @@ class Vote < ActiveRecord::Base
 
   def change_link(domain, poll_slug)
     poll_slug ?
-    "#{domain}/#{poll_slug}/?hash=#{self.random_hash}" :
-    "#{domain}/?hash=#{self.random_hash}"
+    "#{domain}/#{poll_slug}/?hash=#{self.hash}" :
+    "#{domain}/?hash=#{self.hash}"
   end
 
   def top_choice
@@ -189,5 +146,63 @@ class Vote < ActiveRecord::Base
     }
     template = Liquid::Template.parse self.poll.email_template
     template.render liquid_binding
+  end
+
+  def self.dec_to_b62 int
+    encoding = ('0'..'9').to_a + ('a'..'z').to_a + ('A'..'Z').to_a
+
+    return '0' if int == 0
+
+    res = ''
+    while int > 0
+      d = int % 62
+      res << encoding[d]
+      int -= d
+      int /= 62
+    end
+
+    return res.reverse
+  end
+
+
+  def self.b62_to_dec str
+    encoding = ('0'..'9').to_a + ('a'..'z').to_a + ('A'..'Z').to_a
+
+    res = 0
+
+    for char in str.chars
+      res *= 62
+      res += encoding.index(char)
+    end
+
+    return res
+  end
+
+  def self.encode_hash cleartext
+    hash = Digest::SHA256.base64digest(ENV['VOTE_HASH_SECRET'] + '-' + cleartext.to_s).gsub(/[\+\/]/, '+' => '-', '/' => '_').gsub(/=+$/, '').first(6)
+    return cleartext.to_s + '-' + hash
+  end
+
+  def self.valid_hash? hash
+    if hash.blank?
+      return false
+    else
+      cleartext = hash.partition('-').first
+      urlsafe_digest = Digest::SHA256.base64digest(ENV['VOTE_HASH_SECRET'] + '-' + cleartext.to_s).gsub(/[\+\/]/, '+' => '-', '/' => '_').gsub(/=+$/, '').first(6)
+      return hash.partition('-').last == urlsafe_digest
+    end
+  end
+
+  def hash
+    Vote.encode_hash(Vote.dec_to_b62(self.id))
+  end
+
+  def self.find_by_hash hash
+    if Vote.valid_hash? hash
+      vote_id = Vote.b62_to_dec(hash.split('-')[0])
+      return Vote.find vote_id
+    else
+      return nil
+    end
   end
 end

@@ -15,10 +15,13 @@ Rails.application.routes.draw do
   ['', ':poll/'].each do |slug|
     get "#{ slug }" => 'votes#new'
     post "#{ slug }" => 'votes#create'
-    get "#{ slug }v/:random_hash" => 'votes#show'
+    get "#{ slug }v/:vote_hash" => 'votes#show'
     get "#{ slug }s" => 'votes#new'
-    get "#{ slug }s/:random_hash" => 'votes#new'
+    post "#{ slug }s" => 'votes#create'
+    get "#{ slug }s/:vote_hash" => 'votes#new'
+    post "#{ slug }s/:vote_hash" => 'votes#create'
     get "#{ slug }vote/:candidate_slug" => 'votes#new'
+    post "#{ slug }vote/:candidate_slug" => 'votes#create'
     get "#{ slug }candidate/:candidate_id" => 'candidates#show'
     get "#{ slug }results" => 'results#show'
   end

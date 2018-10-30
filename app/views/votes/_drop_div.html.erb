@@ -1,4 +1,4 @@
-<% show_instructions = @vote.errors.empty? && !params['candidate_slug'] && !params['random_hash'] && params['action'] != 'show' ? true : false %>
+<% show_instructions = @vote.errors.empty? && !params['candidate_slug'] && !params['vote_hash'] && params['action'] != 'show' ? true : false %>
 
 <div id="drop-div" class="white ribbon no-select" style="height: 156px; overflow: hidden; text-align: center;">
   <h3 style="display: <%= show_instructions ? 'block' : 'none' %>; margin: auto; color: #ccc; width: %100%; max-width: 600px; height: 156px;">
@@ -6,14 +6,22 @@
   </h3>
   <div id="drop-div-toggle" style="display: <%= show_instructions ? 'none' : 'block' %>;">
     <div class="drop drop1"><!--
-      --><% if c = @parent.try(:top_choice_model) %><!--
-        --><%= render 'candidate', c: c %><!--
-      --><% elsif @parent.try(:first_choice).present? %><!--
-        --><%= render 'write_in', name: @parent['first_choice'] %><!--
-      --><% elsif c = @vote.try(:first_choice_model) %><!--
+      --><% if c = @vote.try(:first_choice_model) %><!--
         --><%= render 'candidate', c: c %><!--
       --><% elsif @vote.try(:first_choice).present? %><!--
         --><%= render 'write_in', name: @vote['first_choice'] %><!--
+      --><% elsif c = @parent.try(:first_choice_model) %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @parent.try(:first_choice).present? %><!--
+        --><%= render 'write_in', name: @parent.try(:first_choice) %><!--
+      --><% elsif c = @parent.try(:second_choice_model) %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @parent.try(:second_choice).present? %><!--
+        --><%= render 'write_in', name: @parent.try(:second_choice) %><!--
+      --><% elsif c = @parent.try(:third_choice_model) %><!--
+        --><%= render 'candidate', c: c %><!--
+      --><% elsif @parent.try(:third_choice).present? %><!--
+        --><%= render 'write_in', name: @parent.try(:third_choice) %><!--
       --><% elsif params['candidate_slug'] %><!--
         --><% if c = @vote.find_candidate_by_slug(params['candidate_slug']) %><!--
           --><%= render 'candidate', c: c %><!--
