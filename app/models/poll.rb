@@ -75,17 +75,26 @@ class Poll < ActiveRecord::Base
     Candidate.find_by_sql("
       SELECT
         c.*,
-        IF(c.id, c.name, 'Other') AS top_choice,
+        CASE
+        WHEN c.id THEN c.name
+        WHEN v.first_choice = '' AND v.second_choice = '' AND v.third_choice = ''
+        THEN 'Blank'
+        ELSE 'Other' END as top_choice,
         COUNT(v.id) AS total
       FROM votes v
-      JOIN candidates c ON c.poll_id = v.poll_id AND c.name = v.first_choice
+      LEFT JOIN candidates c ON c.poll_id = v.poll_id AND c.name =
+        CASE
+        WHEN v.first_choice <> '' THEN v.first_choice
+        WHEN v.second_choice <> '' THEN v.second_choice
+        WHEN v.third_choice <> '' THEN v.third_choice
+        END
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
       WHERE
         v.created_at < '#{ t }' AND
         w.id IS NULL AND
         v.poll_id = #{ self.id }
       GROUP BY top_choice
-      HAVING top_choice <> ''
+      HAVING top_choice <> 'Blank'
       ORDER BY top_choice = 'Other', total DESC
     ")
   end
@@ -96,11 +105,22 @@ class Poll < ActiveRecord::Base
   # in replace of
   #   GROUP_CONCAT(CONCAT(runner_up, ':', gain) SEPERATOR ';') AS gains
   def runoff_results t = Time.now.to_s(:db)
+    hash = []
+
     Vote.find_by_sql("
       SELECT
-        IF(c1.id, v.first_choice, 'Other') AS first_choice,
-        IF(c2.id, v.second_choice, 'Other') AS second_choice,
-        IF(c3.id, v.third_choice, 'Other') AS third_choice,
+        CASE
+        WHEN c1.id THEN v.first_choice
+        WHEN v.first_choice = '' THEN ''
+        ELSE 'OTHER' END AS first_choice,
+        CASE
+        WHEN c2.id THEN v.second_choice
+        WHEN v.second_choice = '' THEN ''
+        ELSE 'OTHER' END AS second_choice,
+        CASE
+        WHEN c3.id THEN v.third_choice
+        WHEN v.third_choice = '' THEN ''
+        ELSE 'OTHER' END AS third_choice,
         COUNT(*) AS total
       FROM votes v
       LEFT JOIN candidates c1 ON v.first_choice = c1.name AND v.poll_id = c1.poll_id AND c1.show_in_results = 1
@@ -112,7 +132,13 @@ class Poll < ActiveRecord::Base
         w.id IS NULL AND
         v.poll_id = #{ self.id }
       GROUP BY v.first_choice, v.second_choice, v.third_choice
-    ")
+    ").each do |set|
+      candidate_array = [set.first_choice.upcase, set.second_choice.upcase, set.third_choice.upcase].reject(&:blank?)
+      candidate_array.fill('BLANK', candidate_array.length...3)
+      hash << { candidates: candidate_array, total: set.total }
+    end
+
+    return hash
   end
 
   # Intended for internal display
@@ -142,7 +168,7 @@ class Poll < ActiveRecord::Base
   end
 
   def total_voters t = Time.now.to_s(:db)
-    self.votes.where("created_at < '#{ t }'").select(:email).distinct.count
+    self.votes.where("(first_choice <> '' OR second_choice <> '' OR third_choice <>'') AND created_at < '#{ t }'").select(:email).distinct.count
   end
 
   def total_votes t = Time.now.to_s(:db)

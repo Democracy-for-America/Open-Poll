@@ -107,28 +107,34 @@
             // third choice not eliminated
             var c = runoffResults[i].candidates[2];
             var v = runoffResults[i].votes;
-            results[c] = results[c] || 0.0;
-            results[c] += v;
-            if (results[c] > max) { max = results[c]; }
-            totalVotes += v;
+            if (c != 'BLANK') {
+              results[c] = results[c] || 0.0;
+              results[c] += v;
+              if (results[c] > max) { max = results[c]; }
+              totalVotes += v;
+            }
           }
         } else {
           // second choice not eliminated
           var c = runoffResults[i].candidates[1];
           var v = runoffResults[i].votes;
-          results[c] = results[c] || 0.0;
-          results[c] += v;
-          if (results[c] > max) { max = results[c]; }
-          totalVotes += v;
+          if (c != 'BLANK') {
+            results[c] = results[c] || 0.0;
+            results[c] += v;
+            if (results[c] > max) { max = results[c]; }
+            totalVotes += v;
+          }
         }
       } else {
         // first choice not eliminated
         var c = runoffResults[i].candidates[0];
         var v = runoffResults[i].votes;
-        results[c] = results[c] || 0.0;
-        results[c] += v;
-        if (results[c] > max) { max = results[c]; }
-        totalVotes += v;
+        if (c != 'BLANK') {
+          results[c] = results[c] || 0.0;
+          results[c] += v;
+          if (results[c] > max) { max = results[c]; }
+          totalVotes += v;
+        }
       }
     }
 

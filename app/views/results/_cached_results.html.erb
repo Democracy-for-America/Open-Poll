@@ -43,7 +43,5 @@
 </div>
 
 <script>
-  window.runoffResults = [<% @runoff_results.each do |set| %>
-    {candidates: ["<%= j set.first_choice.upcase %>", "<%= j set.second_choice.upcase %>", "<%= j set.third_choice.upcase %>"], votes: <%= set.total %>},
-  <% end %>];
+  window.runoffResults = [<% @runoff_results.each do |set| %>{candidates: ["<%= j set[:candidates][0] %>", "<%= j set[:candidates][1] %>", "<%= j set[:candidates][2] %>"], votes: <%= set[:total] %>},<% end %>];
 </script>
