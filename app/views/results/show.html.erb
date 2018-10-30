@@ -162,7 +162,7 @@
         } else if ( $(a).data('name') == 'OTHER' ) {
           return 1;
         } else {
-          return $(b).data('votes') > $(a).data('votes') ? 1 : -1;
+          return parseInt($(b).data('votes')) > parseInt($(a).data('votes')) ? 1 : -1;
         }
       });
       ul.append(li);
