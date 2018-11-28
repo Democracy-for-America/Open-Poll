@@ -29,7 +29,7 @@
       <%= f.text_field :short_name %><br>
       <label class="instructions">Entering "2016" will create <%= @domain %>/2016 as your poll's landing page.</label>
     </div>
-    <% if ENV['ACTIONKIT_PATH'] && ENV['ACTIONKIT_USERNAME'] && ENV['ACTIONKIT_PASSWORD'] %>
+    <% if ENV['ACTIONKIT_DOMAIN'] %>
     <div class="field">
       <%= f.label :actionkit_page %><br>
       <%= f.text_field :actionkit_page %><br>
