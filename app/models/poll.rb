@@ -142,7 +142,7 @@ class Poll < ActiveRecord::Base
   end
 
   # Intended for internal display
-  def raw_results
+  def raw_results t = Time.now.to_s(:db)
     total = self.votes.count
 
     Vote.find_by_sql("
@@ -152,7 +152,7 @@ class Poll < ActiveRecord::Base
         COUNT(DISTINCT v.email) AS votes,
         COUNT(DISTINCT v.ip_address) AS distinct_ip_addresses,
         COUNT(DISTINCT v.session_cookie) AS distinct_session_cookies,
-        SUM(verified_auth_token <> 1) AS unverified_auth_tokens,
+        SUM(v.verified_auth_token <> 1) AS unverified_auth_tokens,
         (SELECT COUNT(DISTINCT w.email) FROM votes w WHERE v.poll_id = w.poll_id AND (v.first_choice = w.first_choice OR v.first_choice = w.second_choice OR v.first_choice = w.third_choice)) AS all_votes
       FROM votes v
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
