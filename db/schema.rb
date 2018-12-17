@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181030003735) do
+ActiveRecord::Schema.define(version: 20181203134642) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -109,18 +109,20 @@ ActiveRecord::Schema.define(version: 20181030003735) do
     t.text     "full_querystring",    limit: 65535
     t.integer  "referring_vote_id",   limit: 4
     t.string   "referring_akid",      limit: 255
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.integer  "poll_id",             limit: 4
     t.string   "phone",               limit: 255
     t.boolean  "sms_opt_in"
     t.string   "auth_token",          limit: 255
     t.boolean  "verified_auth_token"
     t.string   "candidate_slug",      limit: 255
+    t.boolean  "nonvalid",                          default: false, null: false
   end
 
   add_index "votes", ["email"], name: "index_votes_on_email", using: :btree
   add_index "votes", ["first_choice"], name: "index_votes_on_first_choice", using: :btree
+  add_index "votes", ["nonvalid"], name: "index_votes_on_nonvalid", using: :btree
   add_index "votes", ["poll_id"], name: "index_votes_on_poll_id", using: :btree
   add_index "votes", ["second_choice"], name: "index_votes_on_second_choice", using: :btree
   add_index "votes", ["third_choice"], name: "index_votes_on_third_choice", using: :btree

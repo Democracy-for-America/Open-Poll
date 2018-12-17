@@ -58,6 +58,7 @@ class Poll < ActiveRecord::Base
       JOIN votes v ON c.name = v.first_choice AND c.poll_id = v.poll_id
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
       WHERE
+        v.nonvalid = 0 AND
         w.id IS NULL AND
         c.poll_id = #{ self.id } AND
         v.first_choice = c.name AND
@@ -80,7 +81,7 @@ class Poll < ActiveRecord::Base
         WHEN v.first_choice = '' AND v.second_choice = '' AND v.third_choice = ''
         THEN 'Blank'
         ELSE 'Other' END as top_choice,
-        COUNT(v.id) AS total
+        COUNT(DISTINCT v.email) AS total
       FROM votes v
       LEFT JOIN candidates c ON c.poll_id = v.poll_id AND c.name =
         CASE
@@ -90,6 +91,7 @@ class Poll < ActiveRecord::Base
         END
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
       WHERE
+        v.nonvalid = 0 AND
         v.created_at < '#{ t }' AND
         w.id IS NULL AND
         v.poll_id = #{ self.id }
@@ -110,24 +112,25 @@ class Poll < ActiveRecord::Base
     Vote.find_by_sql("
       SELECT
         CASE
-        WHEN c1.id THEN v.first_choice
+        WHEN c1.id THEN c1.name
         WHEN v.first_choice = '' THEN ''
         ELSE 'OTHER' END AS first_choice,
         CASE
-        WHEN c2.id THEN v.second_choice
+        WHEN c2.id THEN c2.name
         WHEN v.second_choice = '' THEN ''
         ELSE 'OTHER' END AS second_choice,
         CASE
-        WHEN c3.id THEN v.third_choice
+        WHEN c3.id THEN c3.name
         WHEN v.third_choice = '' THEN ''
         ELSE 'OTHER' END AS third_choice,
-        COUNT(*) AS total
+        COUNT(DISTINCT v.email) AS total
       FROM votes v
       LEFT JOIN candidates c1 ON v.first_choice = c1.name AND v.poll_id = c1.poll_id AND c1.show_in_results = 1
       LEFT JOIN candidates c2 ON v.second_choice = c2.name AND v.poll_id = c2.poll_id AND c2.show_in_results = 1
       LEFT JOIN candidates c3 ON v.third_choice = c3.name AND v.poll_id = c3.poll_id AND c3.show_in_results = 1
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
       WHERE
+        v.nonvalid = 0 AND
         v.created_at < '#{ t }' AND
         w.id IS NULL AND
         v.poll_id = #{ self.id }
@@ -143,8 +146,6 @@ class Poll < ActiveRecord::Base
 
   # Intended for internal display
   def raw_results t = Time.now.to_s(:db)
-    total = self.votes.count
-
     Vote.find_by_sql("
       SELECT
         v.first_choice,
@@ -160,7 +161,7 @@ class Poll < ActiveRecord::Base
       WHERE
         v.created_at < '#{ t }' AND
         w.id IS NULL AND
-        v.poll_id = #{self.id} AND
+        v.poll_id = #{ self.id } AND
         TRIM(v.first_choice <> '')
       GROUP BY v.first_choice
       ORDER BY votes DESC
@@ -168,13 +169,13 @@ class Poll < ActiveRecord::Base
   end
 
   def total_voters t = Time.now.to_s(:db)
-    self.votes.where("(first_choice <> '' OR second_choice <> '' OR third_choice <>'') AND created_at < '#{ t }'").select(:email).distinct.count
+    self.initial_results.map{ |r| r.total }.sum
   end
 
   def total_votes t = Time.now.to_s(:db)
     Vote.find_by_sql("
       SELECT
-        *
+        v.*
       FROM votes v
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
       WHERE
