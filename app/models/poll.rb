@@ -58,7 +58,7 @@ class Poll < ActiveRecord::Base
       JOIN votes v ON c.name = v.first_choice AND c.poll_id = v.poll_id
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
       WHERE
-        v.nonvalid = 0 AND
+        -- v.nonvalid = 0 AND
         w.id IS NULL AND
         c.poll_id = #{ self.id } AND
         v.first_choice = c.name AND

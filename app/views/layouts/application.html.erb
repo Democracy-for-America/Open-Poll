@@ -13,6 +13,17 @@
 
 </head>
 <body style="zoom: 1;">
+  <% if @parent || request.fullpath.split('/').last == 's' %>
+    <div style="display: none;"><%= @poll.share_vote_og_description %>"></div>
+  <% elsif params['i_voted_for'] %>
+    <% liquid_binding = {'candidate' => params['i_voted_for'] } %>
+    <div style="display: none;"><%= Liquid::Template.parse(@poll.promote_candidate_og_description).render(liquid_binding) %></div>
+  <% elsif params['controller'] == 'results' %>
+    <div style="display: none;"><%= @poll.results_page_og_description %></div>
+  <% else %>
+    <div style="display: none;"><%= @poll.vote_page_og_description %></div>
+  <% end %>
+
   <%= render 'layouts/header' %>
 
 <!--[if lt IE 9]>
