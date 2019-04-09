@@ -72,7 +72,7 @@ class Poll < ActiveRecord::Base
 
   # Used to generate intital bar graph display when results page is loaded,
   # before a user has eliminated any candidates from the running.
-  def initial_results t = Time.now.to_s(:db)
+  def initial_results t = Time.now.to_s(:db), **opts
     Candidate.find_by_sql("
       SELECT
         c.*,
@@ -91,6 +91,8 @@ class Poll < ActiveRecord::Base
         END
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
       WHERE
+        #{ '--' if opts[:state].blank? } v.state = '#{ opts[:state].to_s.gsub(/[^0-9a-z]/i, '') }' AND
+        #{ '--' if opts[:voters].blank? } v.ntl = '#{ { 'new' => 1, 'existing': 0 }[opts[:voters]] }' AND
         v.nonvalid = 0 AND
         v.created_at < '#{ t }' AND
         w.id IS NULL AND
@@ -106,7 +108,7 @@ class Poll < ActiveRecord::Base
   #   STRING_AGG(CONCAT(runner_up, ':', gain), ';') AS gains
   # in replace of
   #   GROUP_CONCAT(CONCAT(runner_up, ':', gain) SEPERATOR ';') AS gains
-  def runoff_results t = Time.now.to_s(:db)
+  def runoff_results t = Time.now.to_s(:db), **opts
     hash = []
 
     Vote.find_by_sql("
@@ -130,6 +132,8 @@ class Poll < ActiveRecord::Base
       LEFT JOIN candidates c3 ON v.third_choice = c3.name AND v.poll_id = c3.poll_id AND c3.show_in_results = 1
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
       WHERE
+        #{ '--' if opts[:state].blank? } v.state = '#{ opts[:state].to_s.gsub(/[^0-9a-z]/i, '') }' AND
+        #{ '--' if opts[:voters].blank? } v.ntl = '#{ { 'new' => 1, 'existing': 0 }[opts[:voters]] }' AND
         v.nonvalid = 0 AND
         v.created_at < '#{ t }' AND
         w.id IS NULL AND
@@ -168,8 +172,8 @@ class Poll < ActiveRecord::Base
     ")
   end
 
-  def total_voters t = Time.now.to_s(:db)
-    self.initial_results.map{ |r| r.total }.sum
+  def total_voters t = Time.now.to_s(:db), **opts
+    self.initial_results(opts).map{ |r| r.total }.sum
   end
 
   def total_votes t = Time.now.to_s(:db)
@@ -183,6 +187,26 @@ class Poll < ActiveRecord::Base
         w.id IS NULL AND
         v.poll_id = #{self.id}
     ").map{ |v| [v.first_choice, v.second_choice, v.third_choice].reject(&:blank?).uniq.length }.sum
+  end
+
+  def fetch_cached_results **opts
+    timestamp = Rails.cache.fetch("results/timestamp/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { (Time.now - 1.minute).to_s(:db) }
+    initial_results = Rails.cache.fetch("results/initial_results/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") {  self.initial_results timestamp, opts }
+    runoff_results = Rails.cache.fetch("results/runoff_results/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") {  self.runoff_results timestamp, opts }
+    max_votes = Rails.cache.fetch("results/max_votes/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { initial_results[0].total }
+    total_voters = Rails.cache.fetch("results/total_voters/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { self.total_voters timestamp, opts }
+
+    if timestamp < (Time.now - 12.minute).to_s(:db)
+      CacheRefreshJob.perform_later(self, opts.to_json)
+    end
+
+    return {
+      timestamp: timestamp,
+      initial: initial_results,
+      runoff: runoff_results,
+      max_votes: max_votes,
+      total_voters: total_voters
+    }
   end
 
   def voting_ended?

@@ -1,23 +1,14 @@
-<% timestamp = Rails.cache.fetch("results/timestamp/#{@poll.id}") { (Time.now - 1.minute).to_s(:db) } %>
-<% @initial_results = Rails.cache.fetch("results/initial_results/#{@poll.id}") { @poll.initial_results timestamp } %>
-<% @runoff_results = Rails.cache.fetch("results/runoff_results/#{@poll.id}") { @poll.runoff_results timestamp } %>
-<% @max_votes = Rails.cache.fetch("results/max_votes/#{@poll.id}") { @initial_results[0].total } %>
-<% @total_voters = Rails.cache.fetch("results/total_voters/#{@poll.id}") { @poll.total_voters timestamp } %>
-
-<% if timestamp < (Time.now - 12.minute).to_s(:db) %>
-  <%# Refresh results if older than 12 minutes %>
-  <% CacheRefreshJob.perform_later(@poll) %>
-<% end %>
+<% results = @poll.fetch_cached_results(voters: params[:voters], state: params[:state]) %>
 
 <div class="container">
   <h3 class="add-bottom"><%= @poll.results_text.html_safe %></h3>
   <% unless @poll.voting_ended? %><p style="text-align: center;">Haven't voted yet? <a href="/<%= @poll.short_name %>" style="color: #049; border-bottom: dashed 1px #049;">Vote now!</a></p><% end %>
   <ul id="active">
-  <% @initial_results.each do |c| %>
+  <% results[:initial].each do |c| %>
     <li class="candidate_row" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>
       " onclick='addToEliminatedCandidates("<%= c.top_choice.upcase %>");'>
       <%= image_tag(c.image(:thumb), class: "candidate_icon") %>
-      <div class="bar_wrapper"><div class="bar" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>" style="width: <%= 0.1 * (1000.0 * c.total / @max_votes ).floor %>%;"><strong>  <%= c.top_choice %>:</strong> <span class="value" data-name="<%= c.top_choice.upcase %>"><%= (100.0 * c.total / @total_voters).round(2) %>%</span></div></div>
+      <div class="bar_wrapper"><div class="bar" data-name="<%= c.top_choice.upcase %>" data-votes="<%= c.total %>" style="width: <%= 0.1 * (1000.0 * c.total / results[:max_votes] ).floor %>%;"><strong>  <%= c.top_choice %>:</strong> <span class="value" data-name="<%= c.top_choice.upcase %>"><%= (100.0 * c.total / results[:total_voters]).round(2) %>%</span></div></div>
     </li>
   <% end %>
   </ul>
@@ -31,7 +22,7 @@
 <!-- END div#main-wrap -->
 
 <div id="removed">
-  <% @initial_results.each do |c| %><div class="ex_candidate"
+  <% results[:initial].each do |c| %><div class="ex_candidate"
     style="" onclick='removeFromEliminatedCandidates("<%= c.top_choice.upcase %>");'>
       <div class="hider-btn" data-name="<%= c.top_choice.upcase %>" style="">
         <%= image_tag(c.image(:thumb), style: "height: 60px; width: 60px; border-radius: 10px;") %>
@@ -43,5 +34,5 @@
 </div>
 
 <script>
-  window.runoffResults = [<% @runoff_results.each do |set| %>{candidates: ["<%= j set[:candidates][0].html_safe %>", "<%= j set[:candidates][1].html_safe %>", "<%= j set[:candidates][2].html_safe %>"], votes: <%= set[:total] %>},<% end %>];
+  window.runoffResults = [<% results[:runoff].each do |set| %>{candidates: ["<%= j set[:candidates][0].html_safe %>", "<%= j set[:candidates][1].html_safe %>", "<%= j set[:candidates][2].html_safe %>"], votes: <%= set[:total] %>},<% end %>];
 </script>
