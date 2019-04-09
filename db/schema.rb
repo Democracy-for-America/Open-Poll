@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181203134642) do
+ActiveRecord::Schema.define(version: 20190405172712) do
 
   create_table "candidates", force: :cascade do |t|
     t.string   "name",               limit: 255
@@ -118,13 +118,17 @@ ActiveRecord::Schema.define(version: 20181203134642) do
     t.boolean  "verified_auth_token"
     t.string   "candidate_slug",      limit: 255
     t.boolean  "nonvalid",                          default: false, null: false
+    t.string   "state",               limit: 255
+    t.boolean  "ntl"
   end
 
   add_index "votes", ["email"], name: "index_votes_on_email", using: :btree
   add_index "votes", ["first_choice"], name: "index_votes_on_first_choice", using: :btree
+  add_index "votes", ["ip_address"], name: "index_votes_on_ip_address", using: :btree
   add_index "votes", ["nonvalid"], name: "index_votes_on_nonvalid", using: :btree
   add_index "votes", ["poll_id"], name: "index_votes_on_poll_id", using: :btree
   add_index "votes", ["second_choice"], name: "index_votes_on_second_choice", using: :btree
+  add_index "votes", ["session_cookie"], name: "index_votes_on_session_cookie", using: :btree
   add_index "votes", ["third_choice"], name: "index_votes_on_third_choice", using: :btree
 
 end
