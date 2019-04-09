@@ -12,11 +12,9 @@
       <th>Candidate</th>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">1st place votes &#8597;</th>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Any place votes &#8597;</th>
-      <% if params[:show_extra] %>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Distinct IP Addresses &#8597;</th>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Distinct Session Cookies &#8597;</th>
       <th data-sort="int_comma" style="cursor: pointer; text-decoration: underline;">Unverified Auth Tokens &#8597;</th>
-      <% end %>
     </thead>
     <tbody>
       <% other_1st = 0 ; other_all = 0 %>
@@ -26,11 +24,9 @@
             <td><%= row.first_choice %><%= row.candidate_id ? '' : '*' %></td>
             <td><%= number_with_delimiter row.votes %></td>
             <td><%= number_with_delimiter row.all_votes %></td>
-            <% if params[:show_extra] %>
             <td><%= number_with_delimiter row.distinct_ip_addresses %></td>
             <td><%= number_with_delimiter row.distinct_session_cookies %></td>
             <td><%= number_with_delimiter row.unverified_auth_tokens %></td>
-            <% end %>
           </tr>
         <% else %>
           <% other_1st += row.votes ; other_all += row.all_votes %>
@@ -40,9 +36,6 @@
   </table>
 
   <p><em>*Write-in candidate</em><br/><br/>Other write-ins: <%= number_with_delimiter other_1st %> first place votes, <%= number_with_delimiter other_all %> any place votes</p>
-
-  <p><% if params[:show_extra] %><%= link_to "Show less", "/admin/polls/#{ @poll.id }/raw_results" %><% else %><%= link_to "Show additional stats", "/admin/polls/#{ @poll.id }/raw_results?show_extra=1" %><% end %></p>
-  </div>
 
   <% CacheRawRefreshJob.perform_later(@poll) %>
 <% end %>
