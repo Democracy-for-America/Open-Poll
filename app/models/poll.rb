@@ -191,14 +191,15 @@ class Poll < ActiveRecord::Base
 
   def fetch_cached_results **opts
     timestamp = Rails.cache.fetch("results/timestamp/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { (Time.now - 1.minute).to_s(:db) }
-    initial_results = Rails.cache.fetch("results/initial_results/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") {  self.initial_results timestamp, opts }
-    runoff_results = Rails.cache.fetch("results/runoff_results/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") {  self.runoff_results timestamp, opts }
-    max_votes = Rails.cache.fetch("results/max_votes/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { initial_results[0].total }
-    total_voters = Rails.cache.fetch("results/total_voters/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { self.total_voters timestamp, opts }
 
     if timestamp < (Time.now - 12.minute).to_s(:db)
       CacheRefreshJob.perform_later(self, opts.to_json)
     end
+
+    initial_results = Rails.cache.fetch("results/initial_results/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") {  self.initial_results timestamp, opts }
+    runoff_results = Rails.cache.fetch("results/runoff_results/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") {  self.runoff_results timestamp, opts }
+    max_votes = Rails.cache.fetch("results/max_votes/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { initial_results[0].total }
+    total_voters = Rails.cache.fetch("results/total_voters/#{ self.id }?voters=#{ opts[:voters] }&state=#{ opts[:state] }") { self.total_voters timestamp, opts }
 
     return {
       timestamp: timestamp,
