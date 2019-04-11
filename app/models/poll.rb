@@ -53,7 +53,7 @@ class Poll < ActiveRecord::Base
       SELECT
         c.name AS first_choice,
         c.*,
-        100.0 * COUNT(v.id) / #{ total } AS percent
+        100.0 * COUNT(DISTINCT v.email) / #{ total } AS percent
       FROM candidates c
       JOIN votes v ON c.name = v.first_choice AND c.poll_id = v.poll_id
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
@@ -65,7 +65,7 @@ class Poll < ActiveRecord::Base
         c.show_in_results = 1
       GROUP BY
         c.id
-      ORDER BY COUNT(*) DESC
+      ORDER BY percent DESC
       LIMIT 5
     ")
   end
