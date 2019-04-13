@@ -45,9 +45,19 @@ class Poll < ActiveRecord::Base
     return @poll
   end
 
+  def fetch_after_action_results
+    timestamp = Rails.cache.fetch("results/after_action_timestamp/#{ self.id }") { (Time.now - 1.minute).to_s(:db) }
+
+    if timestamp < (Time.now - 6.minute).to_s(:db)
+      CacheAfterActionResultsRefreshJob.perform_later(self)
+    end
+
+    Rails.cache.fetch("results/after_action/#{ self.id }") { self.results timestamp }
+  end
+
   # Used on vote confirmation page to display top three candidates
-  def results
-    total = Vote.find_by_sql("SELECT COUNT(DISTINCT email) AS total FROM votes WHERE poll_id = #{ self.id } AND first_choice <> ''").try(:first).try(:total) || 0
+  def results t = Time.now.to_s(:db)
+    total = Vote.find_by_sql("SELECT COUNT(DISTINCT email) AS total FROM votes WHERE created_at < '#{t}' AND poll_id = #{ self.id } AND first_choice <> ''").try(:first).try(:total) || 0
 
     candidates = Candidate.find_by_sql("
       SELECT
@@ -56,9 +66,10 @@ class Poll < ActiveRecord::Base
         100.0 * COUNT(DISTINCT v.email) / #{ total } AS percent
       FROM candidates c
       JOIN votes v ON c.name = v.first_choice AND c.poll_id = v.poll_id
-      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
+      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{t}'
       WHERE
         -- v.nonvalid = 0 AND
+        v.created_at < '#{t}' AND
         w.id IS NULL AND
         c.poll_id = #{ self.id } AND
         v.first_choice = c.name AND

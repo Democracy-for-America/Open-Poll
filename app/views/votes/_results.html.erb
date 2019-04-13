@@ -1,11 +1,9 @@
-<% cache("top_three/#{@poll.id}", expires_in: 5.minutes) do %>
-  <% @poll.results.each_with_index do |c,i| %>
-    <div style="display: inline-block; width: 80px; text-align: center; color: #777; padding: 0 8px; vertical-align: top;">
-      <%= image_tag c.image(:thumb), style: "height: 60px; border-radius: 10px; opacity: .7;" %>
-      <br>
-      <div style="font-size: 12px; line-height: 12px; letter-spacing: -1px; font-weight: bold; text-transform: uppercase;"><%= c.name || c.write_in_name %></div>
-      <div style="line-height: 12px; margin-top: 3px;"><%= c.percent.ceil %>%</div>
-    </div>
-    <% if i == 2 %><i class="md-br"></i><% end %>
-  <% end %>
+<% @poll.fetch_after_action_results.each do |c,i| %>
+  <div style="display: inline-block; width: 80px; text-align: center; color: #777; padding: 0 8px; vertical-align: top;">
+    <%= image_tag c.image(:thumb), style: "height: 60px; border-radius: 10px; opacity: .7;" %>
+    <br>
+    <div style="font-size: 12px; line-height: 12px; letter-spacing: -1px; font-weight: bold; text-transform: uppercase;"><%= c.name || c.write_in_name %></div>
+    <div style="line-height: 12px; margin-top: 3px;"><%= c.percent.ceil %>%</div>
+  </div>
+  <% if i == 2 %><i class="md-br"></i><% end %>
 <% end %>
