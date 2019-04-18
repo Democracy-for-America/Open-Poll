@@ -128,7 +128,19 @@ class Vote < ActiveRecord::Base
   end
 
   def rank
-    candidates = Vote.select('votes.first_choice, COUNT(*) AS total').where(poll_id: self.poll_id).group(:first_choice).order('COUNT(*) DESC')
+    candidates = Vote.find_by_sql("
+      SELECT
+        v.first_choice,
+        COUNT(DISTINCT v.email) AS total
+      FROM votes v
+      LEFT JOIN votes w ON v.email = w.email AND v.poll_id = w.poll_id AND w.id > v.id
+      WHERE
+        w.id IS NULL AND
+        v.poll_id = 7
+      GROUP BY v.first_choice
+      ORDER BY total DESC
+    ")
+
     ( 1 + (candidates.index { |c| c['first_choice'] == self.top_choice } || Candidate.count) ).ordinalize
   end
 
