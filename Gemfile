@@ -1,4 +1,4 @@
-ruby '2.3.8'
+ruby '2.4.6'
 source 'https://rubygems.org'
 
 
@@ -42,7 +42,7 @@ end
 
 group :production do
   # Use Thin as the app server
-  gem 'thin'
+  gem 'puma'
 
   # Use MemCached
   gem 'dalli'

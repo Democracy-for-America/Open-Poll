@@ -3,7 +3,7 @@
 
 showSmsIfCompletePhone = function(ev, duration) {
   duration = duration || 500;
-  if ( $("#vote_phone").val().replace(/[^0-9]/g,"").length >= 10 ) {
+  if ( $("#vote_phone").length > 0 && $("#vote_phone").val().replace(/[^0-9]/g,"").length >= 10 ) {
     if(duration == 500) { $("#idSmsOptIn").prop('checked', true); }
     $("#smsOptInBox").slideDown(duration);
   }
