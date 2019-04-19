@@ -57,7 +57,7 @@ class Poll < ActiveRecord::Base
 
   # Used on vote confirmation page to display top three candidates
   def results t = Time.now.to_s(:db)
-    total = Vote.find_by_sql("SELECT COUNT(DISTINCT email) AS total FROM votes WHERE created_at < '#{t}' AND poll_id = #{ self.id } AND first_choice <> ''").try(:first).try(:total) || 0
+    total = Vote.find_by_sql("SELECT COUNT(DISTINCT email) AS total FROM votes WHERE created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }' AND poll_id = #{ self.id } AND first_choice <> ''").try(:first).try(:total) || 0
 
     candidates = Candidate.find_by_sql("
       SELECT
@@ -66,10 +66,10 @@ class Poll < ActiveRecord::Base
         100.0 * COUNT(DISTINCT v.email) / #{ total } AS percent
       FROM candidates c
       JOIN votes v ON c.name = v.first_choice AND c.poll_id = v.poll_id
-      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{t}'
+      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }'
       WHERE
         -- v.nonvalid = 0 AND
-        v.created_at < '#{ t }' AND
+        v.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }' AND
         w.id IS NULL AND
         c.poll_id = #{ self.id } AND
         v.first_choice = c.name AND
@@ -99,12 +99,12 @@ class Poll < ActiveRecord::Base
         WHEN v.second_choice <> '' THEN v.second_choice
         WHEN v.third_choice <> '' THEN v.third_choice
         END
-      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
+      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }'
       WHERE
         #{ '--' if opts[:state].blank? } v.state = '#{ opts[:state].to_s.gsub(/[^0-9a-z]/i, '') }' AND
         #{ '--' if opts[:voters].blank? } v.ntl = '#{ { 'new' => 1, 'existing': 0 }[opts[:voters]] }' AND
         v.nonvalid = 0 AND
-        v.created_at < '#{ t }' AND
+        v.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }' AND
         w.id IS NULL AND
         v.poll_id = #{ self.id }
       GROUP BY top_choice
@@ -140,12 +140,12 @@ class Poll < ActiveRecord::Base
       LEFT JOIN candidates c1 ON v.first_choice = c1.name AND v.poll_id = c1.poll_id AND c1.show_in_results = 1
       LEFT JOIN candidates c2 ON v.second_choice = c2.name AND v.poll_id = c2.poll_id AND c2.show_in_results = 1
       LEFT JOIN candidates c3 ON v.third_choice = c3.name AND v.poll_id = c3.poll_id AND c3.show_in_results = 1
-      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
+      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }'
       WHERE
         #{ '--' if opts[:state].blank? } v.state = '#{ opts[:state].to_s.gsub(/[^0-9a-z]/i, '') }' AND
         #{ '--' if opts[:voters].blank? } v.ntl = '#{ { 'new' => 1, 'existing': 0 }[opts[:voters]] }' AND
         v.nonvalid = 0 AND
-        v.created_at < '#{ t }' AND
+        v.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }' AND
         w.id IS NULL AND
         v.poll_id = #{ self.id }
       GROUP BY v.first_choice, v.second_choice, v.third_choice
@@ -173,7 +173,7 @@ class Poll < ActiveRecord::Base
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
       LEFT JOIN candidates c ON c.name = v.first_choice AND c.poll_id = v.poll_id
       WHERE
-        v.created_at < '#{ t }' AND
+        v.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }' AND
         w.id IS NULL AND
         v.poll_id = #{ self.id } AND
         TRIM(v.first_choice <> '')
@@ -191,9 +191,9 @@ class Poll < ActiveRecord::Base
       SELECT
         v.*
       FROM votes v
-      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ t }'
+      LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }'
       WHERE
-        v.created_at < '#{ t }' AND
+        v.created_at < '#{ [t, self.voting_ends_at.try(:to_s, :db)].reject(&:blank?).min }' AND
         w.id IS NULL AND
         v.poll_id = #{self.id}
     ").map{ |v| [v.first_choice, v.second_choice, v.third_choice].reject(&:blank?).uniq.length }.sum
