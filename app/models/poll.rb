@@ -69,7 +69,7 @@ class Poll < ActiveRecord::Base
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id AND w.created_at < '#{t}'
       WHERE
         -- v.nonvalid = 0 AND
-        v.created_at < '#{t}' AND
+        v.created_at < '#{ t }' AND
         w.id IS NULL AND
         c.poll_id = #{ self.id } AND
         v.first_choice = c.name AND
@@ -77,7 +77,6 @@ class Poll < ActiveRecord::Base
       GROUP BY
         c.id
       ORDER BY percent DESC
-      LIMIT 5
     ")
   end
 

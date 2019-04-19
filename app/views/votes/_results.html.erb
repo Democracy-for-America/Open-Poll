@@ -1,4 +1,4 @@
-<% @poll.fetch_after_action_results.each do |c,i| %>
+<% @poll.fetch_after_action_results.first(5).each do |c,i| %>
   <div style="display: inline-block; width: 80px; text-align: center; color: #777; padding: 0 8px; vertical-align: top;">
     <%= image_tag c.image(:thumb), style: "height: 60px; border-radius: 10px; opacity: .7;" %>
     <br>
