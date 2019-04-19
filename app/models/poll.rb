@@ -158,16 +158,36 @@ class Poll < ActiveRecord::Base
     return hash
   end
 
+  def fetch_raw_results
+    timestamp = Rails.cache.fetch("raw_results/timestamp/#{ self.id }") { (Time.now - 1.minute).to_s(:db) }
+
+    if timestamp < (Time.now - 12.minute).to_s(:db)
+      CacheRawRefreshJob.perform_later(self)
+    end
+
+    total_voters = Rails.cache.fetch("raw/total_voters/#{ self.id }") { self.total_voters }
+    total_votes = Rails.cache.fetch("raw/total_votes/#{ self.id }") { self.total_votes }
+    raw_results = Rails.cache.fetch("raw/results/#{ self.id }") { self.raw_results }
+
+    return {
+      timestamp: timestamp,
+      total_voters: total_voters,
+      total_votes: total_votes,
+      raw_results: raw_results
+    }
+  end
+
   # Intended for internal display
   def raw_results t = Time.now.to_s(:db)
     Vote.find_by_sql("
       SELECT
         v.first_choice,
         c.id AS candidate_id,
-        COUNT(DISTINCT v.email) AS votes,
+        COUNT(DISTINCT IF(v.nonvalid, NULL, v.email)) AS votes,
         COUNT(DISTINCT v.ip_address) AS distinct_ip_addresses,
         COUNT(DISTINCT v.session_cookie) AS distinct_session_cookies,
         SUM(v.verified_auth_token <> 1) AS unverified_auth_tokens,
+        COUNT(DISTINCT IF(v.nonvalid, v.email, NULL)) AS invalidated_votes,
         (SELECT COUNT(DISTINCT w.email) FROM votes w WHERE v.poll_id = w.poll_id AND (v.first_choice = w.first_choice OR v.first_choice = w.second_choice OR v.first_choice = w.third_choice)) AS all_votes
       FROM votes v
       LEFT JOIN votes w ON v.poll_id = w.poll_id AND v.email = w.email AND v.id < w.id
